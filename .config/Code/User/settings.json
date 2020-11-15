@@ -164,5 +164,6 @@
     "python.languageServer": "Microsoft",
     "editor.fontFamily": "Fira Code",
     "terminal.integrated.fontFamily": "monospace",
-    "editor.fontLigatures": true
+    "editor.fontLigatures": true,
+    "tabnine.experimentalAutoImports": true
 }
