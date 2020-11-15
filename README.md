@@ -1,2 +1,3 @@
 # dotfiles
-This repo is compatible with github.com/MikeMcQuaid/strap
+
+This repo is not compatible with github.com/MikeMcQuaid/strap yet.
