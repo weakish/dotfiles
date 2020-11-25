@@ -22,7 +22,7 @@ func main() {
 		if info.Name() == "README.md" {
 			return nil
 		}
-		dest := "$HOME" + strings.TrimPrefix(path, ".")
+		dest := "$HOME/" + strings.TrimPrefix(path, ".")
 		fmt.Printf("install -D -p %q %q\n", path, dest)
 		return nil
 	})
