@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 func main() {
@@ -22,7 +21,7 @@ func main() {
 		if info.Name() == "README.md" {
 			return nil
 		}
-		dest := "$HOME/" + strings.TrimPrefix(path, ".")
+		dest := "$HOME/" + path
 		fmt.Printf("install -D -p %q %q\n", path, dest)
 		return nil
 	})
