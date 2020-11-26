@@ -1,8 +1,5 @@
 {
-    "window.zoomLevel": 2,
     "editor.minimap.enabled": false,
-    "explorer.confirmDelete": false,
-    "explorer.confirmDragAndDrop": false,
     "cSpell.userWords": [
         "ACLs",
         "ARREARAGE",
@@ -138,16 +135,12 @@
         "zeronet"
     ],
     "keyboard.dispatch": "keyCode",
-    "editor.renderIndentGuides": false,
     "files.exclude": {
         "**/.classpath": true,
         "**/.project": true,
         "**/.settings": true,
         "**/.factorypath": true
     },
-    "editor.suggestSelection": "first",
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-    "git.autofetch": true,
     "diffEditor.renderSideBySide": false,
     "python.jediEnabled": false,
     "terminal.integrated.shell.linux": "/usr/bin/fish",
