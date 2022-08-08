@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	fmt.Println("!/bin/sh")
+	fmt.Println("#!/bin/sh")
 	filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "failed to access %q: %v\n", path, err)
