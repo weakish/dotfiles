@@ -1,3 +1,6 @@
 # dotfiles
 
-This repo is not compatible with github.com/MikeMcQuaid/strap yet.
+```sh
+go run script/setup.go > script/setup
+./script/setup
+```
