@@ -23,7 +23,8 @@ func main() {
 			return nil
 		}
 		dest := "$HOME/" + path
-		fmt.Printf("install -D -p %q %q\n", path, dest)
+		fmt.Printf("mkdir -p `dirname %q`\n", dest)
+		fmt.Printf("install -p %q %q\n", path, dest)
 		return nil
 	})
 }

@@ -1,2 +1,3 @@
 !/bin/sh
-install -D -p ".Brewfile" "$HOME/.Brewfile"
+mkdir -p `dirname "$HOME/.Brewfile"`
+install -p ".Brewfile" "$HOME/.Brewfile"
