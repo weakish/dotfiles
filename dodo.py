@@ -1,2 +1,2 @@
 def task_setup():
-    return {'actions': ['echo "Setup"']}
+    return {'actions': ['echo hello']}
