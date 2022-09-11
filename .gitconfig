@@ -1,0 +1,187 @@
+[user]
+	name = Jang Rush
+	email = weakish@gmail.com
+	signingkey = EA3F0A87
+	useConfigOnly = true
+
+[github]
+	user = weakish
+[gist]
+	private = no
+	extension = txt
+	browse = no
+  	home = /home/weakish/repo/gists
+
+[push]
+	default = simple
+[pull]
+	ff = true
+[commit]
+	gpgsign = true
+
+[core]
+        # Avoid convert Unicode path name to `\xx\xx\xx`.
+	quotepath = off
+	excludesfile = ~/.gitignore_global
+	pager = diff-so-fancy | less --tabs=4 -RFX
+[pager]
+	blame = less -S
+[color]
+	sh = auto
+
+[diff]
+	algorithm = histogram
+[diff "odf"]
+	textconv=odt2txt
+[diff "msword"]
+	textconv=antiword
+[tar "tar.xz"]
+	command = xz -c
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true
+	process = git-lfs filter-process
+
+[pretty]
+	graph = %Cred%h%Creset -%C(yellow)%D%Creset %s %Cgreen(%ar) %Cblue%G?%Creset
+        github = %Creset%<|(54)%s %Cblue%h%Creset %Cgreen%G?%Creset %n    %C(yellow)(%an)%Creset %Cred%ar%Creset %C(cyan)%>>|(63)%D%Creset
+
+[alias]
+  ## log
+  # succient and colorful
+  history = log --graph --pretty=graph --all --
+  h = log --graph --pretty=graph --all --
+  # long
+  changes = log --graph --all --oneline --decorate --name-status  # `changes` name is from darcs
+  ch = log --graph --all --oneline --decorate --name-status
+  # mimic GitHub commits
+  commits = log --graph --pretty=github
+  count = rev-list --count HEAD
+  # child
+  # There is no builtin command for this while we have `^` and `~`, this is
+  # probably because children commits are not referenced, it's a
+  # backwards-linked list only.
+  # Inspired by
+  # http://stackoverflow.com/a/9870218/222893:
+  #     git log --reverse --ancestry-path 894e8b4e93d8f3^..master
+  # We defaults to HEAD instead of master because we may want to know
+  # first-child of a commit in a feature branch ahead of master.
+  first-child = "!f() { git log  --reverse --ancestry-path --pretty=%H $1..${2:-HEAD} | head -1; }; f"
+  # whatchanged
+  wch = whatchanged --patch --oneline
+  # status
+  stat = status --short
+  s = status --short
+  # whatsnew
+  whatsnew = diff --cached
+  whn = diff --cached
+  # filetrail (human)
+  filetrail = log --follow -p -w
+  # mergetrail (human)
+  mergetrail = log --ancestry-path --merges
+  # rank
+  rank = shortlog -sn --no-merges
+  contribution = "!f() { git log --shortstat --no-merges --author=`whoami` | grep -E 'files? changed' | awk '{inserted+=$4; deleted+=$6} END {print inserted \"++ \" deleted\"--\" }'; }; f"
+  # pushed tags
+  releases = "!f() { git ls-remote --tags origin | fgrep -v '^{}' | cut -f 2 | cut -d '/' -f 3; }; f"
+  ## branch
+  # [Human Git Aliases](http://gggritso.com/human-git-aliases)
+  #branches = branch -a
+  rmbranch = branch -d -f
+  mvbranch = branch -m
+  bo = "!f() { git checkout master && git pull && git checkout -b $1; }; f"  # branchout
+  bookmark = checkout -b  # name from hg
+  orphan = checkout --orphan
+  pick = cherry-pick
+  t = tag --sign
+  tags = tag  # hg & human
+  # hg
+  heads = !git show-ref --heads --abbrev | sed -e 's/refs\\/heads\\///'
+  tip = show HEAD --no-patch --pretty='format:%Cred%h'
+  ## stash
+  stashes = stash list  # list
+  ## add
+  a = add
+  ap = add --patch
+  addremove = add -A # hg
+  # hg
+  forget = rm -r --cached
+  # won't show up in status any more
+  dismiss = update-index --assume-unchanged
+  ## commit
+  ci = commit
+  amend = commit --amend
+  fix = commit --fixup
+  # darcs
+  record = commit --patch
+  ## rebase
+  # Also reset author date.
+  ri = rebase --interactive
+  rc = rebase --continue
+  ## reset
+  unstage = reset -q HEAD --  # human
+  discard = checkout --  # human
+  uncommit = reset HEAD~  #human
+  nevermind = !git reset --hard HEAD && git clean -d -f  # human
+  rollback = reset --hard HEAD^
+  ## checkout
+  co = checkout
+  ## diff
+  d = diff
+  wd = diff --word-diff
+  precommit = diff --cached --diff-algorithm=minimal -w  # human
+  ## diffstat for pull request.
+  diffstat = diff -M --stat --summary master
+  ## locate files
+  find = !git ls-files | ag
+  # hg
+  manifest = ls-files
+  # hg
+  locate = !git ls-files | ag
+  ## sync
+  up = pull # assuming pull.ff is on.
+  pushall = !git gc && git remote | xargs -L 1 git push
+  # With `[push] default = simple`, just use `push` instead of `publish`.
+  # publish = !legit publish
+  # We can just use git command, not calling legit.
+  # unpublish = !legit unpublish
+  unpublish = git push origin --delete
+  # darcs
+  mark-conficts = update-index --unresolve
+  # hg
+  outgoing = log --branches --not --remotes=origin
+  out = log --branches --not --remotes=origin
+  incoming = log --remotes=origin --not --branches
+  in = log --remotes=origin --not --branches
+  # Need to set tar.tar.xz.command "xz -c". (from darcs)
+  dist = !(git config tar.tar.xz.command || git config --global tar.tar.xz.command 'xz -c') && git archive --format=tar.xz
+  # hg
+  unbundle = bundle unbundle
+  ## remote
+  remotes = remote --verbose  # human
+  paths = remote --verbose  # hg
+  ra = remote add
+  rmv = remote rename
+  rrm = remote remove
+
+  ## house keeping
+  # dacrs
+  repair = fsck
+  check = fsck
+  optimize = gc --auto
+  # hg
+  verify = fsck
+  ## repository root
+  root = "!git rev-parse --show-toplevel"  # hg
+  ## git-crypt: add entry to .gitattributes
+  crypt = !echo "$1 filter=git-crypt diff=git-crypt" >> .gitattributes
+	get = !hubsh clone
+	create = !hubsh create
+	fork = !hubsh fork
+	git-to-https = !hubsh git-to-https
+	pull-request = !hubsh pull-request
+	pr = !hubsh pull-request
+
+[gpg]
+	program = gpg
