@@ -1,6 +1,3 @@
-# dotfiles
+Execute the following command to set up a unix machine:
 
-```sh
-go run script/setup.go > script/setup
-./script/setup
-```
+    sh scripts/setup

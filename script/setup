@@ -1,3 +1,35 @@
 #!/bin/sh
-mkdir -p `dirname "$HOME/.Brewfile"`
-install -p ".Brewfile" "$HOME/.Brewfile"
+
+set -e
+
+check_version() {
+  local cmd=$1
+  $cmd --version | cut --delimiter ' ' --fields 2 | cut --delimiter '.' --fields 1,2
+}
+
+install_doit() {
+  if [ $(check_version python) -ge 3.10 ]; then
+    python -m pip install doit
+  elif [ $(check_version python3) -ge 3.10]; then
+    python3 -m pip install doit
+  elif type brew > /dev/null; then
+    brew install python
+    python -m pip install doit
+  else
+    echo "Homebrew is required. Please install it manually."
+    echo "https://brew.sh/"
+    exit 1
+  fi
+}
+
+main() {
+if type doit > /dev/null; then
+  doit setup
+else
+  install_doit
+  doit setup
+fi
+
+}
+
+main
