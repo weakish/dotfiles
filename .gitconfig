@@ -176,12 +176,6 @@
   root = "!git rev-parse --show-toplevel"  # hg
   ## git-crypt: add entry to .gitattributes
   crypt = !echo "$1 filter=git-crypt diff=git-crypt" >> .gitattributes
-	get = !hubsh clone
-	create = !hubsh create
-	fork = !hubsh fork
-	git-to-https = !hubsh git-to-https
-	pull-request = !hubsh pull-request
-	pr = !hubsh pull-request
 
 [gpg]
 	program = gpg
