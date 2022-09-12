@@ -13,6 +13,7 @@ execute the following command to set up a unix machine:
 
 - Use homebrew to install packages for macOS and Linux.
 - Vim in private mode.
+- Neovim and vscode.
 
 ## Known Issues
 
