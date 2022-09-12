@@ -24,10 +24,10 @@ install_doit() {
 
 main() {
 if type doit > /dev/null; then
-  doit setup
+  doit
 else
   install_doit
-  doit setup
+  doit
 fi
 
 }
