@@ -86,8 +86,9 @@
   # pushed tags
   releases = "!f() { git ls-remote --tags origin | fgrep -v '^{}' | cut -f 2 | cut -d '/' -f 3; }; f"
   ## branch
+  # Inspired by `legit branches`.
+  branches = "!git branch --format "%(refname:short) %(upstream)" | awk -v b='\033[1;36m' -v r='\033[0m' '{if ($2) print b$1; else print r$1;}'"
   # [Human Git Aliases](http://gggritso.com/human-git-aliases)
-  #branches = branch -a
   rmbranch = branch -d -f
   mvbranch = branch -m
   bo = "!f() { git checkout master && git pull && git checkout -b $1; }; f"  # branchout
@@ -122,7 +123,7 @@
   ## reset
   unstage = reset -q HEAD --  # human
   discard = checkout --  # human
-  uncommit = reset HEAD~  #human
+  uncommit = reset HEAD^  #human
   nevermind = !git reset --hard HEAD && git clean -d -f  # human
   rollback = reset --hard HEAD^
   ## checkout
@@ -142,11 +143,11 @@
   ## sync
   up = pull # assuming pull.ff is on.
   pushall = !git gc && git remote | xargs -L 1 git push
-  # With `[push] default = simple`, just use `push` instead of `publish`.
+  # With `push.default = simple`, just use `push` instead of `publish`.
   # publish = !legit publish
-  # We can just use git command, not calling legit.
+  # Calling legit is unnecessary.
   # unpublish = !legit unpublish
-  unpublish = git push origin --delete
+  unpublish = git push --delete
   # darcs
   mark-conficts = update-index --unresolve
   # hg
