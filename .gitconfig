@@ -98,7 +98,9 @@
   releases = "!f() { git ls-remote --tags origin | fgrep -v '^{}' | cut -f 2 | cut -d '/' -f 3; }; f"
   ## branch
   # Inspired by `legit branches`.
-  branches = "!git branch --format "%(refname:short) %(upstream)" | awk -v b='\033[1;36m' -v r='\033[0m' '{if ($2) print b$1; else print r$1;}'"
+  branches = "!f() { \
+    git branch --format '%(refname:short) %(upstream)' | awk -v b='\\033[1;36m' -v r='\\033[0m' '{if ($2) print b$1; else print r$1;}'; \
+    }; f"
   # [Human Git Aliases](http://gggritso.com/human-git-aliases)
   rmbranch = branch -d -f
   mvbranch = branch -m
