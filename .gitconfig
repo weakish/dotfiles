@@ -20,17 +20,28 @@
 	gpgsign = true
 
 [core]
-        # Avoid convert Unicode path name to `\xx\xx\xx`.
+  # Avoid convert Unicode path name to `\xx\xx\xx`.
 	quotepath = off
 	excludesfile = ~/.gitignore_global
-	pager = diff-so-fancy | less --tabs=4 -RFX
+	pager = delta
+[interactive]
+  diffFilter = delta --color-only
+[add.interactive]
+  useBuiltin = false
+[delta]
+  navigate = true
+  light = false
+[merge]
+  conflictstyle = diff3
+[diff]
+  colorMoved = default
+	algorithm = histogram
+
 [pager]
 	blame = less -S
 [color]
 	sh = auto
 
-[diff]
-	algorithm = histogram
 [diff "odf"]
 	textconv=odt2txt
 [diff "msword"]
