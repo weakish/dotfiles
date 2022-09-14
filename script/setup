@@ -25,6 +25,7 @@ install_doit() {
 }
 
 bootstrap() {
+cp --no-clobber myconfig.example.py myconfig.py
 if type doit > /dev/null; then
   doit
 else

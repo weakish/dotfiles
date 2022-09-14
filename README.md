@@ -4,9 +4,9 @@ execute the following command to set up a unix machine:
 
     git clone https://github.com/weakish/dotfiles
     cd dotfiles
+    brew bundle install
     cp myconfig.example.py myconfig.py
     # edit myconfig.py
-    brew bundle install
     sh scripts/setup
 
 [Homebrew]: https://brew.sh/
