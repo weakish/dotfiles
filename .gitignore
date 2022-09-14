@@ -1,2 +1,8 @@
-.doit.db
 myconfig.py
+
+.doit.db
+
+__pycache__
+
+*.orig
+

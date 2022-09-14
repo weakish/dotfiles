@@ -1,16 +1,5 @@
 [user]
-	name = Jang Rush
-	email = weakish@gmail.com
-	signingkey = EA3F0A87
 	useConfigOnly = true
-
-[github]
-	user = weakish
-[gist]
-	private = no
-	extension = txt
-	browse = no
-  	home = /home/weakish/repo/gists
 
 [push]
 	default = simple
@@ -22,7 +11,6 @@
 [core]
   # Avoid convert Unicode path name to `\xx\xx\xx`.
 	quotepath = off
-	excludesfile = ~/.gitignore_global
 	pager = delta
 [interactive]
   diffFilter = delta --color-only
