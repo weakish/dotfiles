@@ -6,7 +6,7 @@ import sys
 if sys.version_info < (3, 7):
     raise Exception("Python 3.7 or higher is required.")
 elif sys.version_info < (3, 9):
-    from typing_extensions import TypeAlias
+    pass
 else:
     from typing import TypeAlias
 
@@ -16,7 +16,11 @@ from myconfig import user, User
 
 DOIT_CONFIG = {'action_string_formatting': 'both'}
 
-DoItTask: TypeAlias = dict[str, Sequence[str | Path | Callable]]
+if sys.version_info < (3, 10):
+    from typing import Dict, Union
+    DoItTask = Dict[str, Sequence[Union[str, Path, Callable]]]
+else:
+    DoItTask: TypeAlias = dict[str, Sequence[str | Path | Callable]]
 
 def task_git() -> DoItTask:
     return {

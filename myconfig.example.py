@@ -3,10 +3,7 @@ import sys
 if sys.version_info < (3, 7):
     raise Exception("Python 3.7 or higher is required.")
 elif sys.version_info < (3, 8):
-    from typing_extensions import TypedDict, TypeAlias
-elif sys.version_info < (3, 9):
-    from typing_extensions import TypeAlias
-    from typing import TypedDict
+    from typing_extensions import TypedDict
 else:
     from typing import TypedDict
 
