@@ -4,16 +4,18 @@ set -e
 
 check_version() {
   local cmd=$1
-  $cmd --version | cut --delimiter ' ' --fields 2 | cut --delimiter '.' --fields 1,2
+  $cmd --version | cut --delimiter ' ' --fields 2 | cut --delimiter '.' --fields 1  
 }
 
 install_doit() {
-  if [ $(uname --kernel--version | grep --fixed-strings --quiet Ubuntu)]; then
+  if $(uname --kernel-version | grep --fixed-strings --quiet Ubuntu); then
     sudo apt-get install --yes python3-doit
-  elif [ $(check_version python) -ge 3.10 ]; then
+  elif [ $(check_version python) -ge 3 ]; then
     python -m pip install doit
-  elif [ $(check_version python3) -ge 3.10]; then
+    python -m pip install typing_extensions
+  elif [ $(check_version python3) -ge 3 ]; then
     python3 -m pip install doit
+    python3 -m pip install typing_extensions
   elif type brew > /dev/null; then
     brew install python
     python -m pip install doit
