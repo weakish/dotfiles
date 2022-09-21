@@ -4,11 +4,11 @@ set -e
 
 check_version() {
   local cmd=$1
-  $cmd --version | cut --delimiter ' ' --fields 2 | cut --delimiter '.' --fields 1  
+  $cmd --version | cut -d ' ' -f 2 | cut -d '.' -f 1  
 }
 
 install_doit() {
-  if $(uname --kernel-version | grep --fixed-strings --quiet Ubuntu); then
+  if $(uname -a | grep --fixed-strings --quiet Ubuntu); then
     sudo apt-get install --yes python3-doit
   elif [ $(check_version python) -ge 3 ]; then
     python -m pip install doit
@@ -27,7 +27,7 @@ install_doit() {
 }
 
 bootstrap() {
-cp --no-clobber myconfig.example.py myconfig.py
+cp -n myconfig.example.py myconfig.py || echo "myconfig.py existed, will use it" 
 if type doit > /dev/null; then
   doit
 else
