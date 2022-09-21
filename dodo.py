@@ -47,7 +47,7 @@ def task_git_persnoal() -> DoItTask:
             'actions': [run_git_config]
             }
 
-def copy_dotfiles():
+def task_copy_dotfiles():
     for f in ['.hgrc', '.vimrc', '.zprofile']:
         yield {'basename': f[1:],
                 'file_dep': [f],
