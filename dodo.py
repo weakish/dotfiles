@@ -47,20 +47,14 @@ def task_git_persnoal() -> DoItTask:
             'actions': [run_git_config]
             }
 
+def copy_dotfiles():
+    for f in ['.hgrc', '.vimrc', '.zprofile']:
+        yield {'basename': f[1:],
+                'file_dep': [f],
+                'actions': [f'cp {f} ~/{f}'],
+                'targets': [Path(f'~/{f}').expanduser()],
+                }
 
-def task_vim() -> DoItTask:
-    return {
-            'file_dep': ['.vimrc'],
-            'actions': ['cp .vimrc ~/.vimrc'],
-            'targets': [Path('~/.vimrc').expanduser()]
-            }
-
-def task_hg() -> DoItTask:
-    return {
-            'file_dep': ['.hgrc'],
-            'actions': ['cp .hgrc ~/.hgrc'],
-            'targets': [Path('~/.hgrc').expanduser()],
-            }
 
 if __name__ == '__main__':
     import doit
