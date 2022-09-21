@@ -19,7 +19,7 @@ class User(TypedDict, total=False):
 user: Final[User] = {
     'name': None,
     'email': None,
-    'signingkey': None,
+    'signingKey': None,
     'github': None,
     }
 
