@@ -7,6 +7,10 @@
 	ff = true
 [commit]
 	gpgsign = true
+[tag]
+  gpgsign = true
+[gpg]
+  format = ssh
 
 [core]
   # Avoid convert Unicode path name to `\xx\xx\xx`.
@@ -178,6 +182,3 @@
   root = "!git rev-parse --show-toplevel"  # hg
   ## git-crypt: add entry to .gitattributes
   crypt = !echo "$1 filter=git-crypt diff=git-crypt" >> .gitattributes
-
-[gpg]
-	program = gpg
