@@ -26,7 +26,7 @@
         }
       },
       "firefox": {
-        "version": "105.0",
+        "version": "105.0.1",
         "options": {
           "full_name": "firefox"
         }
@@ -104,13 +104,13 @@
         }
       },
       "telegram": {
-        "version": "9.0.1,236872",
+        "version": "9.0.1,237033",
         "options": {
           "full_name": "telegram"
         }
       },
       "whatsapp": {
-        "version": "2.2234.13",
+        "version": "2.2236.10",
         "options": {
           "full_name": "whatsapp"
         }
@@ -120,15 +120,27 @@
         "options": {
           "full_name": "session"
         }
+      },
+      "netnewswire": {
+        "version": "6.1",
+        "options": {
+          "full_name": "netnewswire"
+        }
+      },
+      "keepassxc": {
+        "version": "2.7.1",
+        "options": {
+          "full_name": "keepassxc"
+        }
       }
     }
   },
   "system": {
     "macos": {
       "monterey": {
-        "HOMEBREW_VERSION": "3.6.2",
+        "HOMEBREW_VERSION": "3.6.3",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "92af2bc102a01f96c1dd99819d995bc2154f9160",
+        "Homebrew/homebrew-core": "2c17277b7fbba9449d2ef04a98fb0f70af93d9df",
         "CLT": "14.0.0.0.1.1661618636",
         "Xcode": "14.0",
         "macOS": "12.6"
