@@ -2,19 +2,19 @@
   "entries": {
     "cask": {
       "alt-tab": {
-        "version": "6.46.1",
+        "version": "6.54.0",
         "options": {
           "full_name": "alt-tab"
         }
       },
       "backblaze": {
-        "version": "8.5.0.628",
+        "version": "8.5.0.660",
         "options": {
           "full_name": "backblaze"
         }
       },
       "coteditor": {
-        "version": "4.3.5",
+        "version": "4.4.5",
         "options": {
           "full_name": "coteditor"
         }
@@ -26,25 +26,25 @@
         }
       },
       "firefox": {
-        "version": "105.0.1",
+        "version": "110.0",
         "options": {
           "full_name": "firefox"
         }
       },
       "iina": {
-        "version": "1.3.0",
+        "version": "1.3.1",
         "options": {
           "full_name": "iina"
         }
       },
       "logseq": {
-        "version": "0.8.7",
+        "version": "0.8.17",
         "options": {
           "full_name": "logseq"
         }
       },
       "mullvadvpn": {
-        "version": "2022.4",
+        "version": "2023.1",
         "options": {
           "full_name": "mullvadvpn"
         }
@@ -56,7 +56,7 @@
         }
       },
       "tailscale": {
-        "version": "1.30.2",
+        "version": "1.36.1",
         "options": {
           "full_name": "tailscale"
         }
@@ -68,7 +68,7 @@
         }
       },
       "virtualbox": {
-        "version": "6.1.38,153438",
+        "version": "7.0.6,155176",
         "options": {
           "full_name": "virtualbox"
         }
@@ -80,57 +80,63 @@
         }
       },
       "visual-studio-code": {
-        "version": "1.71.2",
+        "version": "1.75.1",
         "options": {
           "full_name": "visual-studio-code"
         }
       },
       "vivaldi": {
-        "version": "5.4.2753.51",
+        "version": "5.7.2921.53",
         "options": {
           "full_name": "vivaldi"
         }
       },
       "vlc": {
-        "version": "3.0.17.3",
+        "version": "3.0.18",
         "options": {
           "full_name": "vlc"
         }
       },
       "iterm2": {
-        "version": "3.4.16",
+        "version": "3.4.19",
         "options": {
           "full_name": "iterm2"
         }
       },
       "telegram": {
-        "version": "9.0.1,237033",
+        "version": "9.4,243050",
         "options": {
           "full_name": "telegram"
         }
       },
       "whatsapp": {
-        "version": "2.2236.10",
+        "version": "2.2307.10",
         "options": {
           "full_name": "whatsapp"
         }
       },
       "session": {
-        "version": "1.10.1",
+        "version": "1.10.7",
         "options": {
           "full_name": "session"
         }
       },
       "netnewswire": {
-        "version": "6.1",
+        "version": "6.1.1",
         "options": {
           "full_name": "netnewswire"
         }
       },
       "keepassxc": {
-        "version": "2.7.1",
+        "version": "2.7.4",
         "options": {
           "full_name": "keepassxc"
+        }
+      },
+      "android-file-transfer": {
+        "version": "5071136",
+        "options": {
+          "full_name": "android-file-transfer"
         }
       }
     }
@@ -138,12 +144,12 @@
   "system": {
     "macos": {
       "monterey": {
-        "HOMEBREW_VERSION": "3.6.3",
+        "HOMEBREW_VERSION": "4.0.3",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "2c17277b7fbba9449d2ef04a98fb0f70af93d9df",
-        "CLT": "14.0.0.0.1.1661618636",
-        "Xcode": "14.0",
-        "macOS": "12.6"
+        "Homebrew/homebrew-core": "api",
+        "CLT": "14.2.0.0.1.1668646533",
+        "Xcode": "14.1",
+        "macOS": "12.6.3"
       }
     }
   }

@@ -1,4 +1,5 @@
 cask 'alt-tab'
+cask 'android-file-transfer'
 cask 'backblaze'
 cask 'coteditor'
 cask 'chromium'
