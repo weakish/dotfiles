@@ -1,6 +1,6 @@
 [Homebrew] and git will not be installed automatically if absent.
 After homebrew and git installed,
-execute the following command to set up a unix machine:
+execute the following commands to set up a unix machine:
 
     git clone https://github.com/weakish/dotfiles
     cd dotfiles
