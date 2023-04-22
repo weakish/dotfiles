@@ -2132,6 +2132,20 @@
             }
           }
         }
+      },
+      "ruby-install": {
+        "version": "0.9.0",
+        "bottle": {
+          "rebuild": 1,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "all": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ruby-install/blobs/sha256:6243f984664e88546cf1fc88cca99ff2a729d51c47ce563778766567b30958e9",
+              "sha256": "6243f984664e88546cf1fc88cca99ff2a729d51c47ce563778766567b30958e9"
+            }
+          }
+        }
       }
     }
   },
