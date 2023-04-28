@@ -50,9 +50,10 @@ fi
 
 fpath=(~/.zsh $fpath)
 
-# pnpm
-export PNPM_HOME="/Users/kyo/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+# pnpm & deno & MacPorts
+export PNPM_HOME="$Home/Library/pnpm"
+export PATH="$PNPM_HOME:$HOME/.deno/bin:/opt/local/bin:$PATH"
+
 # pnpm end
 
 # chruby
