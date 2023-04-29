@@ -51,8 +51,8 @@ fi
 fpath=(~/.zsh $fpath)
 
 # pnpm & deno & MacPorts
-export PNPM_HOME="$Home/Library/pnpm"
-export PATH="$PNPM_HOME:$HOME/.deno/bin:/opt/local/bin:$PATH"
+export PNPM_HOME="$HOME/Library/pnpm"
+export PATH="$PNPM_HOME:$HOME/.deno/bin:/opt/local/bin:/opt/ltex-ls-15.2.0/bin:$PATH"
 
 # pnpm end
 
