@@ -5,7 +5,6 @@ execute the following commands to set up a unix machine:
     git clone https://github.com/weakish/dotfiles
     cd dotfiles
     brew bundle install
-    brew bundle install --file Caskfile
     cp myconfig.example.py myconfig.py
     # edit myconfig.py
     sh script/setup
