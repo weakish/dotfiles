@@ -8,7 +8,7 @@
         "revision": "ca8594cc635bdb24a89c53541d106b2269c23a82"
       },
       "homebrew/cask-fonts": {
-        "revision": "c0fc25944323228e3c15a17dff59a0c5a3d504f7"
+        "revision": "3c19a538d357a59f7f2daeff494f0ac2deba201d"
       }
     },
     "cask": {
@@ -245,13 +245,19 @@
         "options": {
           "full_name": "whatsapp"
         }
+      },
+      "resilio-sync": {
+        "version": "2.7.3",
+        "options": {
+          "full_name": "resilio-sync"
+        }
       }
     }
   },
   "system": {
     "macos": {
       "monterey": {
-        "HOMEBREW_VERSION": "4.1.0",
+        "HOMEBREW_VERSION": "4.1.1",
         "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "api",
         "CLT": "14.2.0.0.1.1668646533",
