@@ -25,4 +25,9 @@ execute the following commands to set up a unix machine:
 - Mercurial `ui.username` is unset.
 - Too many git aliases.
 
+## Notes
+
+`Brewfile.lock.json` is updated automatically via `brew bundle install`.
+`ports.txt` is generated via `port installed requested and active`.
+
 Pull requests are welcome.
