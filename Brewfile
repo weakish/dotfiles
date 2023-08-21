@@ -1,5 +1,4 @@
 tap "homebrew/bundle"
-tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 cask "alt-tab"
 cask "android-file-transfer"
