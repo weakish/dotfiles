@@ -2,13 +2,13 @@
   "entries": {
     "tap": {
       "homebrew/bundle": {
-        "revision": "3acd40719ab4484b1fc95336d0301f04821611c5"
+        "revision": "4d03d87b61bd5202ffb89232592965252a096820"
       },
       "homebrew/cask": {
         "revision": "ca8594cc635bdb24a89c53541d106b2269c23a82"
       },
       "homebrew/cask-fonts": {
-        "revision": "41fc14a55f50dd8aff09965373cf16153fac0323"
+        "revision": "9b3c7408afd0fd45ae20248eb7412a22f5a72e16"
       }
     },
     "cask": {
@@ -31,7 +31,7 @@
         }
       },
       "bitwarden": {
-        "version": "2023.7.1",
+        "version": "2023.8.2",
         "options": {
           "full_name": "bitwarden"
         }
@@ -49,7 +49,7 @@
         }
       },
       "dropbox": {
-        "version": "180.4.4912",
+        "version": "181.4.5678",
         "options": {
           "full_name": "dropbox"
         }
@@ -61,7 +61,7 @@
         }
       },
       "firefox": {
-        "version": "116.0.3",
+        "version": "117.0",
         "options": {
           "full_name": "firefox"
         }
@@ -121,13 +121,13 @@
         }
       },
       "languagetool": {
-        "version": "1.5.1",
+        "version": "1.5.3",
         "options": {
           "full_name": "languagetool"
         }
       },
       "logseq": {
-        "version": "0.9.14",
+        "version": "0.9.15",
         "options": {
           "full_name": "logseq"
         }
@@ -145,7 +145,7 @@
         }
       },
       "mullvad-browser": {
-        "version": "12.5.2",
+        "version": "12.5.3",
         "options": {
           "full_name": "mullvad-browser"
         }
@@ -187,19 +187,19 @@
         }
       },
       "sublime-merge": {
-        "version": "2083",
+        "version": "2091",
         "options": {
           "full_name": "sublime-merge"
         }
       },
       "tailscale": {
-        "version": "1.48.0",
+        "version": "1.48.1",
         "options": {
           "full_name": "tailscale"
         }
       },
       "telegram": {
-        "version": "10.0.1,250718",
+        "version": "10.0.2,250866",
         "options": {
           "full_name": "telegram"
         }
@@ -229,7 +229,7 @@
         }
       },
       "vivaldi": {
-        "version": "6.1.3035.302",
+        "version": "6.2.3105.43",
         "options": {
           "full_name": "vivaldi"
         }
@@ -241,7 +241,7 @@
         }
       },
       "whatsapp": {
-        "version": "2.2333.11",
+        "version": "2.23.17.80",
         "options": {
           "full_name": "whatsapp"
         }
@@ -257,13 +257,19 @@
         "options": {
           "full_name": "arc"
         }
+      },
+      "skype": {
+        "version": "8.102.0.211",
+        "options": {
+          "full_name": "skype"
+        }
       }
     }
   },
   "system": {
     "macos": {
       "monterey": {
-        "HOMEBREW_VERSION": "4.1.5",
+        "HOMEBREW_VERSION": "4.1.7",
         "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "api",
         "CLT": "14.2.0.0.1.1668646533",
