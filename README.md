@@ -29,5 +29,8 @@ execute the following commands to set up a unix machine:
 
 `Brewfile.lock.json` is updated automatically via `brew bundle install`.
 `ports.txt` is generated via `port installed requested and active`.
+`myports.txt`, `requested.txt`, and `restore_ports.tcl` are used for MacPorts [migration].
 
 Pull requests are welcome.
+
+[migration]: https://trac.macports.org/wiki/Migration
