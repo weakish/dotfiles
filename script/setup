@@ -16,39 +16,35 @@ install_doit() {
   elif [ $(check_version python3) -ge 3 ]; then
     python3 -m pip install doit
     python3 -m pip install typing_extensions
+  elif type port > /dev/null; then
+    sudo port install python310
+    python -m pip install doit
   elif type brew > /dev/null; then
     brew install python
     python -m pip install doit
   else
-    echo "Homebrew is required. Please install it manually."
-    echo "https://brew.sh/"
+    echo "Please install Python (>= 3.8) then run script/setup again."
     exit 1
   fi
 }
 
-bootstrap() {
+main() {
 cp -n myconfig.example.py myconfig.py || echo "myconfig.py existed, will use it" 
+if $(uname -a | grep --fixed-strings --quiet Darwin); then
+  if type brew > /dev/null; then
+    brew bundle install
+  fi
+  if type port > /dev/null; then
+    sudo port selfupdate
+    sudo port upgrade outdated
+  fi
+fi
 if type doit > /dev/null; then
-  doit
+  python -m doit
 else
   install_doit
-  doit
+  python -m doit
 fi
-}
-
-install_dotfiles() {
-  # Currently just call bootstrap,
-  # since doit can be installed via apt in gitpod in 10 seconds,
-  # as I have tested before.
-  bootstrap
-}
-
-main() {
-  if [ INGITPOD = false ]; then
-    bootstrap
-  else
-    install_dotfiles
-  fi
 }
 
 main
