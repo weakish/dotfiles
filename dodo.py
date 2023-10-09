@@ -39,7 +39,7 @@ def run_git_config() -> None:
             else:
                 subprocess.run(['git', 'config', '--global', f'user.{k}', v])
 
-def task_git_persnoal() -> DoItTask:
+def task_git_personal() -> DoItTask:
     return {
             'file_dep': ['.gitconfig'],
             'task_dep': ['git'],
