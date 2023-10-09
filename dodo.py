@@ -46,8 +46,36 @@ def task_git_personal() -> DoItTask:
             'actions': [run_git_config]
             }
 
+def task_hg() -> DoItTask:
+    return {
+            'file_dep': ['.hgrc'],
+            'actions': ['cp .hgrc ~/.hgrc'],
+            'targets': [Path('~/.hgrc').expanduser()],
+            }
+
+def task_hg_personal() -> DoItTask:
+    def config_hg() -> None:
+        name = user.get('name')
+        email = user.get('email')
+        if name is None:
+            pass
+        else:
+            if email is None:
+                username = name
+            else:
+                username = f'{name} <{email}>'
+            with open(Path('~/.hgrc').expanduser(), 'a') as f:
+                f.write(f'\n[ui]\nusername = {username}\n')
+        
+    return {
+        'file_dep': ['.hgrc'],
+        'task_dep': ['hg'],
+        'actions': [config_hg],
+    }
+
+
 def task_copy_dotfiles():
-    for f in ['.hgrc', '.vimrc', '.zprofile']:
+    for f in ['.vimrc', '.zprofile', '.zshrc']:
         yield {'basename': f[1:],
                 'file_dep': [f],
                 'actions': [f'cp {f} ~/{f}'],
