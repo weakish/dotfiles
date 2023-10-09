@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-from __future__ import annotations
 from typing import Callable, Sequence
 import sys
-if sys.version_info < (3, 7):
-    raise Exception("Python 3.7 or higher is required.")
+if sys.version_info < (3, 8):
+    raise Exception("Python 3.8 or higher is required.")
 elif sys.version_info < (3, 9):
     pass
 else:

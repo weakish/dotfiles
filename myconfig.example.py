@@ -1,13 +1,8 @@
-from __future__ import annotations
 import sys
-if sys.version_info < (3, 7):
-    raise Exception("Python 3.7 or higher is required.")
-elif sys.version_info < (3, 8):
-    from typing_extensions import TypedDict
-else:
-    from typing import TypedDict
+if sys.version_info < (3, 8):
+    raise Exception("Python 3.8 or higher is required.")
 
-from typing import Final, Optional
+from typing import Final, Optional, TypedDict
 
 class User(TypedDict, total=False):
     name: Optional[str]
@@ -19,6 +14,7 @@ class User(TypedDict, total=False):
 user: Final[User] = {
     'name': None,
     'email': None,
+    # path to SSH key, e.g. "~/.ssh/id_ed25519"
     'signingKey': None,
     'github': None,
     }
