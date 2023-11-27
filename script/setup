@@ -3,48 +3,48 @@
 set -e
 
 check_version() {
-  local cmd=$1
-  $cmd --version | cut -d ' ' -f 2 | cut -d '.' -f 1  
+	local cmd=$1
+	$cmd --version | cut -d ' ' -f 2 | cut -d '.' -f 1
 }
 
 install_doit() {
-  if $(uname -a | grep --fixed-strings --quiet Ubuntu); then
-    sudo apt-get install --yes python3-doit
-  elif [ $(check_version python) -ge 3 ]; then
-    python -m pip install doit
-    python -m pip install typing_extensions
-  elif [ $(check_version python3) -ge 3 ]; then
-    python3 -m pip install doit
-    python3 -m pip install typing_extensions
-  elif type port > /dev/null; then
-    sudo port install python310
-    python -m pip install doit
-  elif type brew > /dev/null; then
-    brew install python
-    python -m pip install doit
-  else
-    echo "Please install Python (>= 3.8) then run script/setup again."
-    exit 1
-  fi
+	if $(uname -a | grep --fixed-strings --quiet Ubuntu); then
+		sudo apt-get install --yes python3-doit
+	elif [ $(check_version python) -ge 3 ]; then
+		python -m pip install doit
+		python -m pip install typing_extensions
+	elif [ $(check_version python3) -ge 3 ]; then
+		python3 -m pip install doit
+		python3 -m pip install typing_extensions
+	elif type port >/dev/null; then
+		sudo port install python310
+		python -m pip install doit
+	elif type brew >/dev/null; then
+		brew install python
+		python -m pip install doit
+	else
+		echo "Please install Python (>= 3.8) then run script/setup again."
+		exit 1
+	fi
 }
 
 main() {
-cp -n myconfig.example.py myconfig.py || echo "myconfig.py existed, will use it" 
-if $(uname -a | grep --fixed-strings --quiet Darwin); then
-  if type brew > /dev/null; then
-    brew bundle install
-  fi
-  if type port > /dev/null; then
-    sudo port selfupdate
-    sudo port upgrade outdated
-  fi
-fi
-if type doit > /dev/null; then
-  python -m doit
-else
-  install_doit
-  python -m doit
-fi
+	cp -n myconfig.example.py myconfig.py || echo "myconfig.py existed, will use it"
+	if $(uname -a | grep --fixed-strings --quiet Darwin); then
+		if type brew >/dev/null; then
+			brew bundle install
+		fi
+		if type port >/dev/null; then
+			sudo port selfupdate
+			sudo port upgrade outdated
+		fi
+	fi
+	if python has-doit.py; then
+		python -m doit
+	else
+		install_doit
+		python -m doit
+	fi
 }
 
 main

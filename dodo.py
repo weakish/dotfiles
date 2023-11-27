@@ -73,7 +73,6 @@ def task_hg_personal() -> DoItTask:
         'actions': [config_hg],
     }
 
-
 def task_copy_dotfiles():
     for f in ['.vimrc', '.zprofile', '.zshrc']:
         yield {'basename': f[1:],
