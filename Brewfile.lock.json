@@ -2,18 +2,18 @@
   "entries": {
     "tap": {
       "homebrew/bundle": {
-        "revision": "2b24ca760710ef2fe92c6d295dc2813cdb0b166a"
+        "revision": "743f2aad47601c1e162f0ff05219d5a0bb15e0ad"
       },
       "homebrew/cask": {
         "revision": "ca8594cc635bdb24a89c53541d106b2269c23a82"
       },
       "homebrew/cask-fonts": {
-        "revision": "5ae55b615f6005cc59329b91c02390bf08a99601"
+        "revision": "ad6b695c7efa5fbfdbe8b84d0ad993e4482181f5"
       }
     },
     "cask": {
       "alt-tab": {
-        "version": "6.61.0",
+        "version": "6.64.0",
         "options": {
           "full_name": "alt-tab"
         }
@@ -25,13 +25,13 @@
         }
       },
       "backblaze": {
-        "version": "9.0.0.742",
+        "version": "9.0.0.750",
         "options": {
           "full_name": "backblaze"
         }
       },
       "bitwarden": {
-        "version": "2023.9.1",
+        "version": "2023.12.0",
         "options": {
           "full_name": "bitwarden"
         }
@@ -43,55 +43,55 @@
         }
       },
       "coteditor": {
-        "version": "4.6.2",
+        "version": "4.7.1",
         "options": {
           "full_name": "coteditor"
         }
       },
       "dropbox": {
-        "version": "184.4.6543",
+        "version": "188.4.6302",
         "options": {
           "full_name": "dropbox"
         }
       },
       "fig": {
-        "version": "2.16.0",
+        "version": "2.17.0",
         "options": {
           "full_name": "fig"
         }
       },
       "firefox": {
-        "version": "118.0.1",
+        "version": "120.0.1",
         "options": {
           "full_name": "firefox"
         }
       },
       "font-fira-code-nerd-font": {
-        "version": "3.0.2",
+        "version": "3.1.1",
         "options": {
           "full_name": "font-fira-code-nerd-font"
         }
       },
       "font-fira-mono-nerd-font": {
-        "version": "3.0.2",
+        "version": "3.1.1",
         "options": {
           "full_name": "font-fira-mono-nerd-font"
         }
       },
       "font-hack-nerd-font": {
-        "version": "3.0.2",
+        "version": "3.1.1",
         "options": {
           "full_name": "font-hack-nerd-font"
         }
       },
       "font-jetbrains-mono-nerd-font": {
-        "version": "3.0.2",
+        "version": "3.1.1",
         "options": {
           "full_name": "font-jetbrains-mono-nerd-font"
         }
       },
       "fork": {
-        "version": "2.34.1",
+        "version": "2.37",
         "options": {
           "full_name": "fork"
         }
@@ -103,7 +103,7 @@
         }
       },
       "iterm2": {
-        "version": "3.4.21",
+        "version": "3.4.22",
         "options": {
           "full_name": "iterm2"
         }
@@ -115,19 +115,19 @@
         }
       },
       "kitty": {
-        "version": "0.30.1",
+        "version": "0.31.0",
         "options": {
           "full_name": "kitty"
         }
       },
       "languagetool": {
-        "version": "1.6.0",
+        "version": "1.6.8",
         "options": {
           "full_name": "languagetool"
         }
       },
       "logseq": {
-        "version": "0.9.18",
+        "version": "0.10.1",
         "options": {
           "full_name": "logseq"
         }
@@ -145,13 +145,13 @@
         }
       },
       "mullvad-browser": {
-        "version": "12.5.6",
+        "version": "13.0.6",
         "options": {
           "full_name": "mullvad-browser"
         }
       },
       "mullvadvpn": {
-        "version": "2023.4",
+        "version": "2023.6",
         "options": {
           "full_name": "mullvadvpn"
         }
@@ -163,7 +163,7 @@
         }
       },
       "obsidian": {
-        "version": "1.4.14",
+        "version": "1.4.16",
         "options": {
           "full_name": "obsidian"
         }
@@ -175,13 +175,13 @@
         }
       },
       "rectangle": {
-        "version": "0.73",
+        "version": "0.75",
         "options": {
           "full_name": "rectangle"
         }
       },
       "session": {
-        "version": "1.11.4",
+        "version": "1.11.5",
         "options": {
           "full_name": "session"
         }
@@ -193,13 +193,13 @@
         }
       },
       "tailscale": {
-        "version": "1.50.1",
+        "version": "1.56.1",
         "options": {
           "full_name": "tailscale"
         }
       },
       "telegram": {
-        "version": "10.1.2,252294",
+        "version": "10.3,256373",
         "options": {
           "full_name": "telegram"
         }
@@ -211,7 +211,7 @@
         }
       },
       "virtualbox": {
-        "version": "7.0.10,a,158379",
+        "version": "7.0.12,159484",
         "options": {
           "full_name": "virtualbox"
         }
@@ -223,25 +223,25 @@
         }
       },
       "visual-studio-code": {
-        "version": "1.83.0",
+        "version": "1.85.1",
         "options": {
           "full_name": "visual-studio-code"
         }
       },
       "vivaldi": {
-        "version": "6.2.3105.58",
+        "version": "6.5.3206.39",
         "options": {
           "full_name": "vivaldi"
         }
       },
       "vlc": {
-        "version": "3.0.18",
+        "version": "3.0.20",
         "options": {
           "full_name": "vlc"
         }
       },
       "whatsapp": {
-        "version": "2.23.19.86",
+        "version": "2.23.24.80",
         "options": {
           "full_name": "whatsapp"
         }
@@ -259,7 +259,7 @@
         }
       },
       "skype": {
-        "version": "8.105.0.214",
+        "version": "8.110.0.218",
         "options": {
           "full_name": "skype"
         }
@@ -268,6 +268,18 @@
         "version": "0.16.2",
         "options": {
           "full_name": "squirrel"
+        }
+      },
+      "xquartz": {
+        "version": "2.8.5",
+        "options": {
+          "full_name": "xquartz"
+        }
+      },
+      "orbstack": {
+        "version": "1.2.0,16493",
+        "options": {
+          "full_name": "orbstack"
         }
       }
     }
@@ -283,12 +295,12 @@
         "macOS": "12.6.8"
       },
       "ventura": {
-        "HOMEBREW_VERSION": "4.1.14",
+        "HOMEBREW_VERSION": "4.1.25",
         "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "api",
-        "CLT": "15.0.0.0.1.1694021235",
+        "CLT": "15.1.0.0.1.1700200546",
         "Xcode": "15.0",
-        "macOS": "13.6"
+        "macOS": "13.6.3"
       }
     }
   }
