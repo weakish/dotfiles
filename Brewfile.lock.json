@@ -2,13 +2,13 @@
   "entries": {
     "tap": {
       "homebrew/bundle": {
-        "revision": "743f2aad47601c1e162f0ff05219d5a0bb15e0ad"
+        "revision": "e4798d8075e1a793f065be3e5e1674ec09193d17"
       },
       "homebrew/cask": {
         "revision": "ca8594cc635bdb24a89c53541d106b2269c23a82"
       },
       "homebrew/cask-fonts": {
-        "revision": "ad6b695c7efa5fbfdbe8b84d0ad993e4482181f5"
+        "revision": "6f04e418dc2bbb72fc438b25de315e0d48aff286"
       }
     },
     "cask": {
@@ -61,7 +61,7 @@
         }
       },
       "firefox": {
-        "version": "120.0.1",
+        "version": "121.0",
         "options": {
           "full_name": "firefox"
         }
@@ -145,7 +145,7 @@
         }
       },
       "mullvad-browser": {
-        "version": "13.0.6",
+        "version": "13.0.7",
         "options": {
           "full_name": "mullvad-browser"
         }
@@ -277,9 +277,15 @@
         }
       },
       "orbstack": {
-        "version": "1.2.0,16493",
+        "version": "1.1.0_16370",
         "options": {
           "full_name": "orbstack"
+        }
+      },
+      "aldente": {
+        "version": "1.24.1,48",
+        "options": {
+          "full_name": "aldente"
         }
       }
     }
@@ -295,7 +301,7 @@
         "macOS": "12.6.8"
       },
       "ventura": {
-        "HOMEBREW_VERSION": "4.1.25",
+        "HOMEBREW_VERSION": "4.2.0",
         "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.1.0.0.1.1700200546",

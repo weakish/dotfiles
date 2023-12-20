@@ -1,5 +1,6 @@
 tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
+cask "aldente"
 cask "alt-tab"
 cask "android-file-transfer"
 cask "backblaze"
