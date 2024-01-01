@@ -8,7 +8,10 @@
         "revision": "ca8594cc635bdb24a89c53541d106b2269c23a82"
       },
       "homebrew/cask-fonts": {
-        "revision": "6f04e418dc2bbb72fc438b25de315e0d48aff286"
+        "revision": "e76f53e1101768fadfcdc1ed865c52a2d52c46b4"
+      },
+      "oven-sh/bun": {
+        "revision": "95a893f8c127572132235680837b99c743ba0c3d"
       }
     },
     "cask": {
@@ -31,7 +34,7 @@
         }
       },
       "bitwarden": {
-        "version": "2023.12.0",
+        "version": "2023.12.1",
         "options": {
           "full_name": "bitwarden"
         }
@@ -49,7 +52,7 @@
         }
       },
       "dropbox": {
-        "version": "188.4.6302",
+        "version": "189.4.8395",
         "options": {
           "full_name": "dropbox"
         }
@@ -103,7 +106,7 @@
         }
       },
       "iterm2": {
-        "version": "3.4.22",
+        "version": "3.4.23",
         "options": {
           "full_name": "iterm2"
         }
@@ -121,13 +124,13 @@
         }
       },
       "languagetool": {
-        "version": "1.6.8",
+        "version": "1.6.9",
         "options": {
           "full_name": "languagetool"
         }
       },
       "logseq": {
-        "version": "0.10.1",
+        "version": "0.10.3",
         "options": {
           "full_name": "logseq"
         }
@@ -163,7 +166,7 @@
         }
       },
       "obsidian": {
-        "version": "1.4.16",
+        "version": "1.5.3",
         "options": {
           "full_name": "obsidian"
         }
@@ -199,7 +202,7 @@
         }
       },
       "telegram": {
-        "version": "10.3,256373",
+        "version": "10.4,257123",
         "options": {
           "full_name": "telegram"
         }
@@ -229,7 +232,7 @@
         }
       },
       "vivaldi": {
-        "version": "6.5.3206.39",
+        "version": "6.5.3206.48",
         "options": {
           "full_name": "vivaldi"
         }
@@ -241,7 +244,7 @@
         }
       },
       "whatsapp": {
-        "version": "2.23.24.80",
+        "version": "2.23.25.86",
         "options": {
           "full_name": "whatsapp"
         }
@@ -277,7 +280,7 @@
         }
       },
       "orbstack": {
-        "version": "1.1.0_16370",
+        "version": "1.3.0_16556",
         "options": {
           "full_name": "orbstack"
         }
@@ -286,6 +289,56 @@
         "version": "1.24.1,48",
         "options": {
           "full_name": "aldente"
+        }
+      }
+    },
+    "brew": {
+      "bun": {
+        "version": "1.0.20",
+        "bottle": false
+      },
+      "quickjs": {
+        "version": "2023-12-09",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_sonoma": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/quickjs/blobs/sha256:ffe454f6a6769362ec1815202bd8334fa7e5ed16b508bcf156c803fde955b26c",
+              "sha256": "ffe454f6a6769362ec1815202bd8334fa7e5ed16b508bcf156c803fde955b26c"
+            },
+            "arm64_ventura": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/quickjs/blobs/sha256:a6225bcd309365375cbe089ab244c7dea6380472371aed81d46980b12b5a1296",
+              "sha256": "a6225bcd309365375cbe089ab244c7dea6380472371aed81d46980b12b5a1296"
+            },
+            "arm64_monterey": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/quickjs/blobs/sha256:c0ce5f4db7bc80887e48848927c6494017c70dd4a93d98190c273a21f8708150",
+              "sha256": "c0ce5f4db7bc80887e48848927c6494017c70dd4a93d98190c273a21f8708150"
+            },
+            "sonoma": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/quickjs/blobs/sha256:cae8f5c7521a1384e3b0d56fc9f1ee938e5873028725ca8cda26923218b9cc32",
+              "sha256": "cae8f5c7521a1384e3b0d56fc9f1ee938e5873028725ca8cda26923218b9cc32"
+            },
+            "ventura": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/quickjs/blobs/sha256:e600e961deea4c58270b4781e17e7f965e39fb90320747e336a761dd5f0f46a9",
+              "sha256": "e600e961deea4c58270b4781e17e7f965e39fb90320747e336a761dd5f0f46a9"
+            },
+            "monterey": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/quickjs/blobs/sha256:6f2f33cd8834d693faea27f674c040f4cd4784b6eced7fbe921e97171d293f40",
+              "sha256": "6f2f33cd8834d693faea27f674c040f4cd4784b6eced7fbe921e97171d293f40"
+            },
+            "x86_64_linux": {
+              "cellar": "/home/linuxbrew/.linuxbrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/quickjs/blobs/sha256:7e80912dedcc5230d9cf0d6af6ca8f0d9a53c4c533ca249cfa35776fa6c91660",
+              "sha256": "7e80912dedcc5230d9cf0d6af6ca8f0d9a53c4c533ca249cfa35776fa6c91660"
+            }
+          }
         }
       }
     }
@@ -301,11 +354,11 @@
         "macOS": "12.6.8"
       },
       "ventura": {
-        "HOMEBREW_VERSION": "4.2.0",
+        "HOMEBREW_VERSION": "4.2.1",
         "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.1.0.0.1.1700200546",
-        "Xcode": "15.0",
+        "Xcode": "15.1",
         "macOS": "13.6.3"
       }
     }

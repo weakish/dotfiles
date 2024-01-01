@@ -1,5 +1,8 @@
 tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
+tap "oven-sh/bun"
+brew "bun"
+brew "quickjs"
 cask "aldente"
 cask "alt-tab"
 cask "android-file-transfer"
