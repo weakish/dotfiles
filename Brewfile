@@ -1,7 +1,10 @@
 tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
 tap "oven-sh/bun"
+# somehow borgbackup failed to compile via macports
+brew "borgbackup"
 brew "bun"
+# quickjs version in macports is old
 brew "quickjs"
 cask "aldente"
 cask "alt-tab"
@@ -39,6 +42,7 @@ cask "squirrel"
 cask "sublime-merge"
 cask "tailscale"
 cask "telegram"
+cask "utm"
 cask "veracrypt"
 cask "virtualbox"
 cask "virtualbox-extension-pack"
