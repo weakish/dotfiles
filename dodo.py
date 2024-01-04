@@ -23,9 +23,9 @@ else:
 
 def task_git() -> DoItTask:
     return {
-            'file_dep': ['.gitconfig'],
-            'actions': ['cp .gitconfig ~/.gitconfig'],
-            'targets': [Path('~/.gitconfig').expanduser()],
+            'file_dep': ['.gitconfig', '.config/git/allowed_signers'],
+            'actions': ['cp .gitconfig ~/.gitconfig', 'mkdir -p ~/.config/git', 'cp .config/git/allowed_signers ~/.config/git/allowed_signers'],
+            'targets': [Path('~/.gitconfig').expanduser(), Path('~/.config/git/allowed_signers').expanduser()],
             }
 
 def run_git_config() -> None:

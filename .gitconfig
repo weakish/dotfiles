@@ -11,6 +11,8 @@
   gpgsign = true
 [gpg]
   format = ssh
+[gpg.ssh]
+  allowedSignersFile = $HOME/.config/git/allowed_signers
 
 [core]
   # Avoid convert Unicode path name to `\xx\xx\xx`.

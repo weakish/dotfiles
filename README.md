@@ -9,7 +9,7 @@ Ensure that git is installed, then:
 ## Features
 
 - Vim in private mode.
-- Sign all git commits and tags with ssh key.
+- Sign all git commits and tags with ssh key. (Please edit `.config/git/allowed_signers` to add your trusted ssh public keys.)  
 
 ## Known Issues
 
