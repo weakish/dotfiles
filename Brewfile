@@ -1,4 +1,3 @@
-tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
 tap "oven-sh/bun"
 # somehow borgbackup failed to compile via macports
