@@ -5,7 +5,7 @@ borgbackup
 bpytop
 cmus
 deno
-exa
+eza
 fd
 ffmpeg
 fish
