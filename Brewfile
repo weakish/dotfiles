@@ -1,8 +1,6 @@
 tap "homebrew/cask-fonts"
 tap "oven-sh/bun"
 tap "weakish/tap"
-# somehow borgbackup failed to compile via macports
-brew "borgbackup"
 brew "bun"
 brew "cocoapods"
 # quickjs version in macports is old
