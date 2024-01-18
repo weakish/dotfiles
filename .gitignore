@@ -1,6 +1,7 @@
 myconfig.py
 
 .doit.db
+.doit.db.db
 
 __pycache__
 
