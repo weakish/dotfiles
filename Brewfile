@@ -3,6 +3,8 @@ tap "oven-sh/bun"
 tap "weakish/tap"
 brew "bun"
 brew "cocoapods"
+# failed to build zig, which is required to build ncdu via macports
+brew "ncdu"
 # quickjs version in macports is old
 brew "quickjs"
 cask "aldente"

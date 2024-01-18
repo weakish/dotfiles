@@ -26,7 +26,6 @@ lazygit
 lima
 mercurial
 n
-ncdu
 neovim
 openjdk8-zulu
 openjdk17
