@@ -7,7 +7,7 @@ from typing import Final, Optional, TypedDict
 class User(TypedDict, total=False):
     name: Optional[str]
     email: Optional[str]
-    signingkey: Optional[str]
+    signingKey: Optional[str]
     github: Optional[str]
 
 # Configuration begins here.
