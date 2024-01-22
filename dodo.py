@@ -34,7 +34,6 @@ def task_git() -> DoItTask:
 
 
 def run_git_config() -> None:
-    
     for k in ('name', 'email', 'signingKey', 'github'):
         v = user.get(k)
         if v is None:
