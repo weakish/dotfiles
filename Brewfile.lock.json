@@ -8,7 +8,7 @@
         "revision": "781c67a24149c2ad6d96695d0293a798d7bd963f"
       },
       "oven-sh/bun": {
-        "revision": "95104e636fba7c83a22c6e7ea69d8888ffbcd342"
+        "revision": "2c34cadc029ec3168a597d2c17ada425314ed36c"
       },
       "weakish/tap": {
         "revision": "ef81027eaf45c106f68e63e06e9410b1b1853d52"
@@ -60,7 +60,7 @@
         }
       },
       "bun": {
-        "version": "1.0.23",
+        "version": "1.0.24",
         "bottle": false
       },
       "quickjs": {
@@ -366,7 +366,7 @@
         }
       },
       "kitty": {
-        "version": "0.31.0",
+        "version": "0.32.0",
         "options": {
           "full_name": "kitty"
         }
@@ -468,13 +468,13 @@
         }
       },
       "tailscale": {
-        "version": "1.56.1",
+        "version": "1.58.0",
         "options": {
           "full_name": "tailscale"
         }
       },
       "telegram": {
-        "version": "10.5,257870",
+        "version": "10.6,258516",
         "options": {
           "full_name": "telegram"
         }
@@ -552,7 +552,7 @@
         }
       },
       "deezer": {
-        "version": "6.0.40",
+        "version": "6.0.50",
         "options": {
           "full_name": "deezer"
         }
@@ -612,7 +612,7 @@
         "macOS": "13.6.3"
       },
       "sonoma": {
-        "HOMEBREW_VERSION": "4.2.4-46-gf515810",
+        "HOMEBREW_VERSION": "4.2.4-69-g36024e2",
         "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.1.0.0.1.1700200546",
