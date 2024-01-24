@@ -42,6 +42,7 @@ main() {
 		if type port >/dev/null; then
 			sudo port selfupdate
 			sudo port upgrade outdated
+			port installed requested and active > ports.txt
 		fi
 	fi
 	if python has-doit.py; then
