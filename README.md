@@ -1,3 +1,7 @@
+My dotfiles for macOS.
+
+## Usage
+
 Ensure that git is installed, then:
 
     git clone https://github.com/weakish/dotfiles
@@ -9,12 +13,17 @@ Ensure that git is installed, then:
 ## Features
 
 - Vim in private mode.
-- Sign all git commits and tags with ssh key. (Please edit `.config/git/allowed_signers` to add your trusted ssh public keys.)  
+
+- Sign all git commits and tags with ssh key.
+
+    Git supports signing commits with a GPG, SSH, or X.509 key.
+    I prefer the SSH key for signing because I mainly use ssh protocol to communite with git server, thus the ssh key is always available on the machine.
+
+    Please edit `.config/git/allowed_signers` to add your trusted ssh public keys.
 
 ## Known Issues
 
 - It OVERWRITES changes you made to your configuration files.
-- BSD and Windows are not supported.
 - Too many git aliases.
 
 ## Notes
