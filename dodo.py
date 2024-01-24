@@ -47,7 +47,6 @@ def run_git_config() -> None:
 
 def task_git_personal() -> DoItTask:
     return {
-        'file_dep': ['.gitconfig'],
         'task_dep': ['git'],
         'actions': [run_git_config]
     }
