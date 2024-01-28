@@ -5,7 +5,7 @@
         "revision": "e4798d8075e1a793f065be3e5e1674ec09193d17"
       },
       "homebrew/cask-fonts": {
-        "revision": "9cfef62b9aa4d467d265a253149252a17f11ecdd"
+        "revision": "4c6e7968218e214060f713512436307a6223646b"
       },
       "oven-sh/bun": {
         "revision": "ed65e447c05e5d77b60413fcd70eab4164c6fa6c"
@@ -450,7 +450,7 @@
         }
       },
       "fork": {
-        "version": "2.38",
+        "version": "2.39",
         "options": {
           "full_name": "fork"
         }
@@ -474,7 +474,7 @@
         }
       },
       "kitty": {
-        "version": "0.32.0",
+        "version": "0.32.1",
         "options": {
           "full_name": "kitty"
         }
@@ -504,7 +504,7 @@
         }
       },
       "mullvad-browser": {
-        "version": "13.0.7",
+        "version": "13.0.9",
         "options": {
           "full_name": "mullvad-browser"
         }
@@ -690,7 +690,7 @@
         }
       },
       "writerside": {
-        "version": "2023.2,232.10275",
+        "version": "2023.3,233.14272",
         "options": {
           "full_name": "writerside"
         }
@@ -712,6 +712,12 @@
         "options": {
           "full_name": "gitup"
         }
+      },
+      "pock": {
+        "version": "0.9.0-22",
+        "options": {
+          "full_name": "pock"
+        }
       }
     }
   },
@@ -726,7 +732,7 @@
         "macOS": "13.6.3"
       },
       "sonoma": {
-        "HOMEBREW_VERSION": "4.2.5-66-ga6b8a79",
+        "HOMEBREW_VERSION": "4.2.5-91-g8392f70",
         "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.1.0.0.1.1700200546",
