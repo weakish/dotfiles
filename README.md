@@ -23,6 +23,8 @@ Ensure that git is installed, then:
 
 [git-sign]: https://blog.gitbutler.com/signing-commits-in-git-explained/
 
+For details, refer to the configuration files and scripts in this repository.
+
 ## Known Issues
 
 - It OVERWRITES changes you made to your configuration files.

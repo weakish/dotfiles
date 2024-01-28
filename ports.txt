@@ -38,6 +38,7 @@ The following ports are currently installed:
   lima @0.20.0_0 (active)
   ltex-ls @16.0.0_0 (active)
   marksman @2023-12-09_0 (active)
+  mas @1.8.6_0 (active)
   mercurial @6.6.2_0 (active)
   mpv @0.37.0_2+audiocd+bluray+bundle+dvd+libarchive+network+opengl+osd+python312+rubberband (active)
   n @9.2.0_1 (active)

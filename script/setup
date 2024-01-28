@@ -45,6 +45,10 @@ main() {
 			sudo port upgrade outdated
 			port installed requested and active > ports.txt
 		fi
+		if type mas >/dev/null; then
+			mas upgrade
+			mas list > mas.txt
+		fi
 	fi
 	if python has-doit.py; then
 		python -m doit
