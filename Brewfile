@@ -45,9 +45,6 @@ cask "mullvadvpn"
 cask "netnewswire"
 cask "obsidian"
 cask "orbstack"
-# Need to manually run the installer afterwards.
-# open /usr/local/Caskroom/paragon-extfs-installer/VERSION/FSInstaller.app
-cask "paragon-extfs-installer"
 cask "rectangle"
 cask "resilio-sync"
 cask "session"
