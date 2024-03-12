@@ -1,0 +1,13 @@
+AirBuddy.app
+CleanMyMac X.app
+CleanShot X.app
+ClearVPN.app
+Gemini.app
+MenubarX.app
+Nitro PDF Pro.app
+One Switch.app
+Path Finder.app
+Plus.app
+TextSniper.app
+TypingMind.app
+Wallpaper Wizard.app
