@@ -49,6 +49,9 @@ main() {
 			mas upgrade
 			mas list > mas.txt
 		fi
+		if [ -e /Applications/Setapp ]; then
+			ls /Applications/Setapp/ | rg '\.app' > setapp.txt
+		fi
 	fi
 	if python has-doit.py; then
 		python -m doit
