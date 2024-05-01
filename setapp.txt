@@ -1,5 +1,4 @@
 AirBuddy.app
-CleanMyMac X.app
 CleanShot X.app
 ClearVPN.app
 Gemini.app
