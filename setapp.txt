@@ -4,9 +4,11 @@ ClearVPN.app
 Gemini.app
 MenubarX.app
 Nitro PDF Pro.app
+Novabench.app
 One Switch.app
 Path Finder.app
 Plus.app
 TextSniper.app
 TypingMind.app
+Usage.app
 Wallpaper Wizard.app
