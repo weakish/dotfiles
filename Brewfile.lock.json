@@ -8,7 +8,7 @@
         "revision": "0ed20f35d21ebc3f4f829689b101078718ad5ce1"
       },
       "oven-sh/bun": {
-        "revision": "6788d2358ca29bfb41ba907815f174d86d1c7e63"
+        "revision": "404cdb961c8f7c2e2a5bec2d6246ea8a9125e5f3"
       },
       "weakish/tap": {
         "revision": "04c36e1dffe2768427ff703ab381d2fdec0d4028"
@@ -60,7 +60,7 @@
         }
       },
       "bun": {
-        "version": "1.1.21",
+        "version": "1.1.24",
         "bottle": false
       },
       "quickjs": {
@@ -328,45 +328,45 @@
         }
       },
       "instaloader": {
-        "version": "4.12.1",
+        "version": "4.13",
         "bottle": {
           "rebuild": 0,
           "root_url": "https://ghcr.io/v2/homebrew/core",
           "files": {
             "arm64_sonoma": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0",
-              "sha256": "5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0"
+              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b",
+              "sha256": "6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b"
             },
             "arm64_ventura": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0",
-              "sha256": "5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0"
+              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b",
+              "sha256": "6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b"
             },
             "arm64_monterey": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0",
-              "sha256": "5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0"
+              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b",
+              "sha256": "6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b"
             },
             "sonoma": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0",
-              "sha256": "5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0"
+              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b",
+              "sha256": "6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b"
             },
             "ventura": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0",
-              "sha256": "5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0"
+              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b",
+              "sha256": "6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b"
             },
             "monterey": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0",
-              "sha256": "5884038d8c9a9483d9a208db2242e36267453c756b2385e2ce4a4f48b23811b0"
+              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b",
+              "sha256": "6182495df81f13c68aeb94a736d96d91b4e9b844ebd573df6516cdcde3b8cb5b"
             },
             "x86_64_linux": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:48af73c3b23302ffb48f40eab04c21f8d75db70e5e859a0f359f4c193fe63a33",
-              "sha256": "48af73c3b23302ffb48f40eab04c21f8d75db70e5e859a0f359f4c193fe63a33"
+              "url": "https://ghcr.io/v2/homebrew/core/instaloader/blobs/sha256:6d4acb0c849b751f95ab8f1c8df6a2c2c25ea1eb27f5a88d4a640ef73d2bf32b",
+              "sha256": "6d4acb0c849b751f95ab8f1c8df6a2c2c25ea1eb27f5a88d4a640ef73d2bf32b"
             }
           }
         }
@@ -422,7 +422,7 @@
         }
       },
       "dropbox": {
-        "version": "204.4.5420",
+        "version": "205.4.5765",
         "options": {
           "full_name": "dropbox"
         }
@@ -434,7 +434,7 @@
         }
       },
       "firefox": {
-        "version": "128.0.3",
+        "version": "129.0.1",
         "options": {
           "full_name": "firefox"
         }
@@ -464,7 +464,7 @@
         }
       },
       "fork": {
-        "version": "2.44.3",
+        "version": "2.45.1",
         "options": {
           "full_name": "fork"
         }
@@ -476,7 +476,7 @@
         }
       },
       "iterm2": {
-        "version": "3.5.3",
+        "version": "3.5.4",
         "options": {
           "full_name": "iterm2"
         }
@@ -488,7 +488,7 @@
         }
       },
       "kitty": {
-        "version": "0.35.2",
+        "version": "0.36.0",
         "options": {
           "full_name": "kitty"
         }
@@ -518,7 +518,7 @@
         }
       },
       "mullvad-browser": {
-        "version": "13.5.1",
+        "version": "13.5.2",
         "options": {
           "full_name": "mullvad-browser"
         }
@@ -554,7 +554,7 @@
         }
       },
       "rectangle": {
-        "version": "0.81",
+        "version": "0.82",
         "options": {
           "full_name": "rectangle"
         }
@@ -566,13 +566,13 @@
         }
       },
       "session": {
-        "version": "1.12.5",
+        "version": "1.13.1",
         "options": {
           "full_name": "session"
         }
       },
       "skype": {
-        "version": "8.125.0.201",
+        "version": "8.126.0.208",
         "options": {
           "full_name": "skype"
         }
@@ -590,13 +590,13 @@
         }
       },
       "tailscale": {
-        "version": "1.70.0",
+        "version": "1.72.0",
         "options": {
           "full_name": "tailscale"
         }
       },
       "telegram": {
-        "version": "10.15.4,266662",
+        "version": "11.0.2,267159",
         "options": {
           "full_name": "telegram"
         }
@@ -626,13 +626,13 @@
         }
       },
       "visual-studio-code": {
-        "version": "1.92.0",
+        "version": "1.92.2",
         "options": {
           "full_name": "visual-studio-code"
         }
       },
       "vivaldi": {
-        "version": "6.8.3381.50",
+        "version": "6.8.3381.53",
         "options": {
           "full_name": "vivaldi"
         }
@@ -644,7 +644,7 @@
         }
       },
       "whatsapp": {
-        "version": "2.24.14.85",
+        "version": "2.24.15.80",
         "options": {
           "full_name": "whatsapp"
         }
@@ -668,13 +668,13 @@
         }
       },
       "eloston-chromium": {
-        "version": "127.0.6533.88-1.1",
+        "version": "127.0.6533.119-1.1",
         "options": {
           "full_name": "eloston-chromium"
         }
       },
       "deezer": {
-        "version": "6.0.190",
+        "version": "6.0.200",
         "options": {
           "full_name": "deezer"
         }
@@ -698,7 +698,7 @@
         }
       },
       "fleet": {
-        "version": "1.38.89",
+        "version": "1.39.110",
         "options": {
           "full_name": "fleet"
         }
@@ -740,7 +740,7 @@
         }
       },
       "thunderbird": {
-        "version": "115.13.0",
+        "version": "115.14.0",
         "options": {
           "full_name": "thunderbird"
         }
@@ -758,7 +758,7 @@
         "macOS": "13.6.3"
       },
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.12-102-g78132b1",
+        "HOMEBREW_VERSION": "4.3.17-30-gac5c14a",
         "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
