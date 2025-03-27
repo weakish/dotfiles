@@ -1,5 +1,3 @@
-AirBuddy.app
-AnyTrans for iOS.app
 Canary Mail.app
 CleanMyMac.app
 CleanPresenter.app
@@ -19,20 +17,16 @@ Mimir.app
 Movist Pro.app
 NetSpot.app
 Nitro PDF Pro.app
-Novabench.app
 Numi.app
 One Switch.app
 Paste.app
 Path Finder.app
-Plus.app
 Pulltube.app
 Soulver.app
 Spark Mail.app
 TextSniper.app
 TripMode.app
 Tripsy.app
-TypingMind.app
 Usage.app
-Wallpaper Wizard.app
 WiFi Explorer.app
 WiFi Signal.app
