@@ -14,7 +14,6 @@ brew "quickjs"
 # zig 0.11.0 failed to build in macports
 brew "zig"
 brew "zls"
-cask "aldente"
 cask "alt-tab"
 cask "android-file-transfer"
 cask "audacity"
