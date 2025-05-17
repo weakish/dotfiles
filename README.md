@@ -32,7 +32,6 @@ For details, refer to the configuration files and scripts in this repository.
 
 ## Notes
 
-`Brewfile.lock.json` is updated automatically via `brew bundle install`.
 `ports.txt` is generated via `port installed requested and active`.
 `myports.txt`, `requested.txt`, and `restore_ports.tcl` are used for MacPorts [migration].
 
