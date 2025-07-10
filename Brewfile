@@ -1,4 +1,3 @@
-tap "homebrew/cask-fonts"
 tap "oven-sh/bun"
 tap "weakish/tap"
 brew "bun"
