@@ -1,0 +1,141 @@
+[editor.soft-wrap]
+enable = true
+
+
+
+[editor.cursor-shape]
+# Unlike vim, helix by default uses a block cursor in insert mode,
+# which is indistinguishable from the cursor shape in normal mode.
+# This is because helix support multiple cursors,
+# and due to the limit of terminal environment,
+# only the primary cursor shape can be changed.
+# Thus, to maintain consistency of visual looks of multiple cursors,
+# helix uses block cursors in all modes. 
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[keys.normal]
+# Vim Muscle Memory
+# Mostly based on https://github.com/LGUG2Z/helix-vim
+
+# By default, helix does not use these keys.
+0 = "goto_line_start"
+"^" = "goto_first_nonwhitespace"
+"{" = ["goto_prev_paragraph", "collapse_selection"]
+"}" = ["goto_next_paragraph", "collapse_selection"]
+# [count]V is not supported. (I seldom use them in vim though.)
+V = ["select_mode", "extend_to_line_bounds"]
+D = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection"]
+
+# Helix uses this for piping selection to shell command.
+# I seldom use this.
+"$" = "goto_line_end"
+
+# If helix's move to select style is preferred:
+# 0 = "extend_to_line_start"
+# "^" = "extend_to_first_nonwhitespace"
+# "$" = "extend_to_line_end"
+
+# Helix uses `x` to select the line below.
+x = "delete_selection"
+
+# Helix uses this to add cursor below,
+# which I seldom use.
+C = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
+
+# Helix uses this just to yank main selection to clipboard.
+Y = ["extend_to_line_end", "yank_main_selection_to_clipboard", "collapse_selection"]
+
+# Helix uses this to select the whole buffer,
+# which is useful for multi cursor edits and global replacement.
+# Under Helix, Alt+ArrowKeys can be used to select nodes in syntax tree,
+# which is smarter than match brackets.
+# "%" = "match_brackets"
+
+# Helix uses this for goto_line,
+# so 1G goes to the first line, same as vim.
+# However, unlike vim, just pressing `G` does not go to the end of file.
+G = "goto_file_end"
+# The above mapping result in `[Num]G` does not work in Helix.
+# But command mode can be used instead.
+# For example, `:42` goes to the 42th line.
+# This is the same under both Vim and Helix.
+
+# Helix does not move character right or collapse selection for these keys,
+# which is important since Helix favors selecting while moving.
+# w = ["move_next_word_start", "move_char_right", "collapse_selection"]
+# W = ["move_next_long_word_start", "move_char_right", "collapse_selection"]
+# e = ["move_next_word_end", "collapse_selection"]
+# E = ["move_next_long_word_end", "collapse_selection"]
+# b = ["move_prev_word_start", "collapse_selection"]
+# B = ["move_prev_long_word_start", "collapse_selection"]
+
+# Helix keeps text remained selected after entering into insert mode,
+# since it encourages you to come back to normal mode as soon as possible.
+# i = ["insert_mode", "collapse_selection"]
+# a = ["append_mode", "collapse_selection"]
+
+# Helix keeps text remained selected when hitting Esc in normal mode.
+esc = ["collapse_selection", "keep_primary_selection"]
+
+# Helix uses `*` to search current selection as the pattern,
+# which I find not convinient in some cases.
+# For example, if I press `be` to select the word `to` under the cursor,
+# then press `*n`, it will match words like `into`. 
+"*" = ["move_char_right", "move_prev_word_start", "move_next_word_end",
+  "search_selection",  "make_search_word_bounded", "search_next"]
+# Helix by default does not use `#`.
+"#" = ["move_char_right", "move_prev_word_start", "move_next_word_end",
+  "search_selection", "make_search_word_bounded", "search_prev"]
+# I learnt about `make_search_word_bounded` via
+# https://github.com/helix-editor/helix/discussions/9015
+
+# Unlike vim, under Helix, Up and Down arrows move between virtual lines instead of textual lines,
+# when soft wrap is enabled.
+# This is consistent with most other GUI editors.
+# However, under Helix, j and k also move between virtual lines,
+# which I think is not a good design,
+# since selections are more likely to apply to textual lines.
+k = "move_line_up"
+j = "move_line_down"
+
+# Cmd-/ is used to toggle comment in SublimeText and VSCode under macOS.
+# Helix uses C-c instead.
+# Currently helix does not support the Command key,
+# so I configured kitty to send the Command unicode character when pressing Cmd-/,
+# and map that to `toggle_comments` in Helix.  
+"⌘" = "toggle_comments"
+
+# The mappings below cause just pressing `d` to delete selection not working under normal mode.
+# Under normal mode, pressing `d` will enter into a minor mode, waiting for the second key.
+# However, pressing `d` to delete selections still work in select mode.
+[keys.normal.d]
+# [count]dd is not supported.
+d = ["extend_to_line_bounds", "yank_main_selection_to_clipboard", "delete_selection"]
+w = ["move_next_word_start", "yank_main_selection_to_clipboard", "delete_selection"]
+W = ["move_next_long_word_start", "yank_main_selection_to_clipboard", "delete_selection"]
+
+[keys.normal.y]
+y = ["extend_to_line_bounds", "yank_main_selection_to_clipboard", "normal_mode", "collapse_selection"]
+w = ["move_next_word_start", "yank_main_selection_to_clipboard", "collapse_selection", "normal_mode"]
+W = ["move_next_long_word_start", "yank_main_selection_to_clipboard", "collapse_selection", "normal_mode"]
+
+[keys.select]
+# Similar to adjustments in normal mode
+"{" = ["extend_to_line_bounds", "goto_prev_paragraph"]
+"}" = ["extend_to_line_bounds", "goto_next_paragraph"]
+0 = "goto_line_start"
+"^" = "goto_first_nonwhitespace"
+D = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection"]
+"$" = "goto_line_end"
+"%" = "match_brackets"
+"⌘" = "toggle_comments"
+k = ["extend_line_up", "extend_to_line_bounds"]
+j = ["extend_line_down", "extend_to_line_bounds"]
+
+
+# By default, Helix uses `ma` and `mi` instead.
+i = "select_textobject_inner"
+a = "select_textobject_around"
+

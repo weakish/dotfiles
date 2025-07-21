@@ -1,18 +1,7 @@
 tap "oven-sh/bun"
 tap "weakish/tap"
-brew "bun"
-brew "cocoapods"
 brew "instaloader"
-# install mercurial via macports resulted in an error: Failed to destroot mercurial
-brew "mercurial"
-# failed to build zig, which is required to build ncdu via macports
-brew "ncdu"
 brew "patat"
-# quickjs version in macports is old
-brew "quickjs"
-# zig 0.11.0 failed to build in macports
-brew "zig"
-brew "zls"
 cask "alt-tab"
 cask "android-file-transfer"
 cask "audacity"
