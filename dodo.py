@@ -80,6 +80,14 @@ def task_hg_personal() -> DoItTask:
         'actions': [config_hg],
     }
 
+def task_paperwm() -> DoItTask:
+    return {
+        'file_dep': ['.hammerspoon/init.lua'],
+        'actions': ['mkdir -p ~/.hammerspoon/Spoons',
+                    'cp .hammerspoon/init.lua ~/.hammerspoon/init.lua',
+                    'git clone https://github.com/mogenson/PaperWM.spoon ~/.hammerspoon/Spoons/PaperWM.spoon'],
+        'targets': [Path('~/.hammerspoon/Spoons/PaperWM.spoon').expanduser()],
+    }
 
 def task_copy_dotfiles():
     for f in ['.vimrc', '.zprofile', '.zshrc']:
