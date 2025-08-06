@@ -23,7 +23,6 @@ Paste.app
 Path Finder.app
 Pulltube.app
 Soulver.app
-Spark Mail.app
 TextSniper.app
 TripMode.app
 Tripsy.app
