@@ -85,7 +85,7 @@ def task_paperwm() -> DoItTask:
         'file_dep': ['.hammerspoon/init.lua'],
         'actions': ['mkdir -p ~/.hammerspoon/Spoons',
                     'cp .hammerspoon/init.lua ~/.hammerspoon/init.lua',
-                    'git clone https://github.com/mogenson/PaperWM.spoon ~/.hammerspoon/Spoons/PaperWM.spoon'],
+                    'git -C ~/.hammerspoon/Spoons/PaperWM.spoon pull || git clone https://github.com/mogenson/PaperWM.spoon ~/.hammerspoon/Spoons/PaperWM.spoon'],
         'targets': [Path('~/.hammerspoon/Spoons/PaperWM.spoon').expanduser()],
     }
 
