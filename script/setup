@@ -31,6 +31,11 @@ install_doit() {
 main() {
 	cp -n myconfig.example.py myconfig.py || echo "myconfig.py existed, will use it"
 	if $(uname -a | grep --fixed-strings --quiet Darwin); then
+		if type port >/dev/null; then
+			sudo port selfupdate
+			sudo port upgrade outdated
+			port installed requested and active > ports.txt
+		fi
 		if type brew >/dev/null; then
 			# copy .zshrc first because PATH is set in .zshrc
 			cp .zshrc ~/.zshrc
@@ -40,13 +45,9 @@ main() {
 			brew upgrade --greedy
 			brew bundle install
 		fi
-		if type port >/dev/null; then
-			sudo port selfupdate
-			sudo port upgrade outdated
-			port installed requested and active > ports.txt
-		fi
 		if type mas >/dev/null; then
-			mas upgrade
+			# skip mas upgrade since mas requires macOS 15+ and this mac is still on macOS 14
+			# mas upgrade
 			mas list > mas.txt
 		fi
 		if [ -e /Applications/Setapp ]; then
