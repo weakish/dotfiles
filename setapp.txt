@@ -1,4 +1,3 @@
-Canary Mail.app
 CleanMyMac.app
 CleanPresenter.app
 CleanShot X.app
