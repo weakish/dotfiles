@@ -1,4 +1,3 @@
-tap "oven-sh/bun"
 tap "weakish/tap"
 brew "instaloader"
 brew "mas"
