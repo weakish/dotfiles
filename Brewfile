@@ -1,5 +1,7 @@
+tap "jotta/cli"
 tap "weakish/tap"
 brew "instaloader"
+brew "jotta-cli"
 brew "mas"
 brew "patat"
 cask "affinity"
