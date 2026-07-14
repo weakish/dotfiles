@@ -1,5 +1,5 @@
-tap "jotta/cli"
-tap "weakish/tap"
+tap "jotta/cli", trusted: { formulae: ["jotta-cli"] }
+tap "weakish/tap", trusted: true
 brew "instaloader"
 brew "jotta-cli"
 brew "mas"
