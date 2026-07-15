@@ -21,7 +21,7 @@ The following ports are currently installed:
   fpp @1.1_0 (active)
   fx @39.2.0_0 (active)
   fzf @0.74.0_0 (active)
-  gallery-dl @1.32.5_0 (active)
+  gallery-dl @1.32.6_0 (active)
   gawk @5.4.1_0 (active)
   gcc12 @12.4.0_2+stdlib_flag (active)
   gcc13 @13.4.0_1+stdlib_flag (active)
