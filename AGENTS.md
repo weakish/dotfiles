@@ -27,6 +27,13 @@ macOS dotfiles: shell/Python setup (`script/setup`, `dodo.py`), package lists (`
 - For Python edits: sanity-check with the interpreter (e.g. `python3 -m py_compile dodo.py`) when practical
 - Prefer reading and editing tracked files; leave live `~/...` copies to setup/doit
 
+## Plans
+
+Under `.agents/plans/`. Tracked — keep each plan aligned with what is actually in the tree, not aspirational scratch.
+
+- When you implement or change something a plan covers, update that plan in the **same turn** (status, checklist, gotchas, commit SHAs).
+- If reality diverges from the plan, edit the plan; do not leave stale todos or wrong facts.
+
 ## Skills
 
 Under `.agents/skills/<name>/SKILL.md`. When a task matches a skill description, read and follow that `SKILL.md`. **Before any commit**, read [`.agents/skills/git-commits/SKILL.md`](.agents/skills/git-commits/SKILL.md) even if the user did not mention commits.
