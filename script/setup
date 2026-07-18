@@ -32,6 +32,8 @@ main() {
 	cp -n myconfig.example.py myconfig.py || echo "myconfig.py existed, will use it"
 	if $(uname -a | grep --fixed-strings --quiet Darwin); then
 		if type port >/dev/null; then
+			# -N: non-interactive; ports needing a license/variant answer may fail
+			# instead of prompting, and set -e will abort the whole setup run.
 			sudo port -N selfupdate
 			sudo port -N upgrade outdated
 			port installed requested and active > ports.txt
