@@ -1,27 +1,19 @@
 #!/usr/bin/env python3
 
 import sys
-from typing import Callable, Sequence
 
-if sys.version_info < (3, 8):
-    raise Exception("Python 3.8 or higher is required.")
-elif sys.version_info < (3, 9):
-    pass
-else:
-    from typing import TypeAlias
+if sys.version_info < (3, 10):
+    raise Exception("Python 3.10 or higher is required.")
 
 import subprocess
 from pathlib import Path
+from typing import Callable, Sequence, TypeAlias
+
 from myconfig import user
 
 DOIT_CONFIG = {'action_string_formatting': 'both'}
 
-if sys.version_info < (3, 10):
-    from typing import Dict, Union
-
-    DoItTask = Dict[str, Sequence[Union[str, Path, Callable]]]
-else:
-    DoItTask: TypeAlias = dict[str, Sequence[str | Path | Callable]]
+DoItTask: TypeAlias = dict[str, Sequence[str | Path | Callable]]
 
 
 def task_git() -> DoItTask:

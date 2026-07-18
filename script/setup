@@ -12,10 +12,8 @@ install_doit() {
 		sudo apt-get install --yes python3-doit
 	elif [ $(check_version python) -ge 3 ]; then
 		python -m pip install doit
-		python -m pip install typing_extensions
 	elif [ $(check_version python3) -ge 3 ]; then
 		python3 -m pip install doit
-		python3 -m pip install typing_extensions
 	elif type port >/dev/null; then
 		sudo port -N install python313 py313-pip
 		sudo port select --set python python313
@@ -25,7 +23,7 @@ install_doit() {
 		brew install python
 		python -m pip install doit
 	else
-		echo "Please install Python (>= 3.8) then run script/setup again."
+		echo "Please install Python (>= 3.10) then run script/setup again."
 		exit 1
 	fi
 }

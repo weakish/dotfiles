@@ -1,6 +1,6 @@
 import sys
-if sys.version_info < (3, 8):
-    raise Exception("Python 3.8 or higher is required.")
+if sys.version_info < (3, 10):
+    raise Exception("Python 3.10 or higher is required.")
 
 from typing import Final, Optional, TypedDict
 

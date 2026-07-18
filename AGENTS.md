@@ -18,7 +18,7 @@ macOS dotfiles: shell/Python setup (`script/setup`, `dodo.py`), package lists (`
 - Propagate failures (throw/exit); no silent fallbacks; no shims unless asked
 - Write for human review: a human is expected to review agent code. Fewer output tokens save cost, but human readability (including scannability) wins when they conflict.
 - Prefer a small function with a long, descriptive name over a comment that restates what the code does; reserve comments for non-obvious implementation details (formats, limits, platform quirks)
-- Python: target 3.8+ as in `dodo.py` / `myconfig.example.py`; keep typing consistent with surrounding code
+- Python: target 3.10+ as in `dodo.py` / `myconfig.example.py` (matches doit 0.37+); keep typing consistent with surrounding code
 - Shell: prefer `set -e`; avoid interactive prompts in automation paths
 
 ## Commands
