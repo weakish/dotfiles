@@ -17,7 +17,7 @@ install_doit() {
 		python3 -m pip install doit
 		python3 -m pip install typing_extensions
 	elif type port >/dev/null; then
-		sudo port install python310
+		sudo port -N install python310
 		python -m pip install doit
 	elif type brew >/dev/null; then
 		brew install python
