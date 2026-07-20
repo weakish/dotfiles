@@ -1,6 +1,9 @@
 [user]
 	useConfigOnly = true
 
+[init]
+	defaultBranch = master
+
 [push]
 	default = simple
 [pull]
