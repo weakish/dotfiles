@@ -1,6 +1,6 @@
 # Add type check, formatter, and lint
 
-**Status: implemented** on `lint` (prep `7ab694d`; tooling is this branch tip).
+**Status: implemented** on `lint` (prep `7ab694d`; tooling tip; Setapp glob/sort on tip).
 
 ## Context
 
@@ -161,8 +161,8 @@ Shell system packages locally and in CI: `shellcheck`, `shfmt`. **shuck** comes 
 ### 7. Shell cleanup ([`script/setup`](../../script/setup), [`script/check`](../../script/check))
 
 - **shfmt** applied (`-i 0 -ci`) — redirect spacing, `case` indent in `script/check`.
-- **shellcheck** — `-s sh` then `-s dash` in `script/check` (no global `-e`); remaining inline disables:
-  - SC2012 on Setapp `ls | rg` in `script/setup` (intentional; do not switch to `find` without need)
+- **shellcheck** — `-s sh` then `-s dash` in `script/check` (no global `-e`; no inline disables).
+- **Setapp listing** — `*.app` glob loop + `${f##*/}`, then `LC_ALL=C sort -o` (no `ls`/`rg`; avoids SC2012 and non-POSIX `rg`).
 - **shuck** — `shuck check` on `script/setup`, `script/check`, and `.github/workflows/check.yml` (alongside ShellCheck; does not replace it).
 - **`script/check` root** — require cwd markers; no auto-`cd` / `CDPATH=` (tooling tip).
 - **setup idioms** (`7ab694d`) — no SC3043/SC2091/SC2046: `"$1"` in `check_version`, `if uname | grep -q`, quoted `"$(check_version …)"`; `command -v` for `port`/`brew`/`mas`.

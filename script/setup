@@ -52,8 +52,12 @@ main() {
 			mas list >mas.txt
 		fi
 		if [ -e /Applications/Setapp ]; then
-			# shellcheck disable=SC2012
-			ls /Applications/Setapp/ | rg '\.app' >setapp.txt
+			: >setapp.txt
+			for f in /Applications/Setapp/*.app; do
+				[ -e "$f" ] || continue
+				printf '%s\n' "${f##*/}" >>setapp.txt
+			done
+			LC_ALL=C sort -o setapp.txt setapp.txt
 		fi
 	fi
 	if python has-doit.py; then
