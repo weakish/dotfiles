@@ -3,23 +3,22 @@
 set -e
 
 check_version() {
-	local cmd=$1
-	$cmd --version | cut -d ' ' -f 2 | cut -d '.' -f 1
+	"$1" --version | cut -d ' ' -f 2 | cut -d '.' -f 1
 }
 
 install_doit() {
-	if $(uname -a | grep --fixed-strings --quiet Ubuntu); then
+	if uname -a | grep --fixed-strings --quiet Ubuntu; then
 		sudo apt-get install --yes python3-doit
-	elif [ $(check_version python) -ge 3 ]; then
+	elif [ "$(check_version python)" -ge 3 ]; then
 		python -m pip install doit
-	elif [ $(check_version python3) -ge 3 ]; then
+	elif [ "$(check_version python3)" -ge 3 ]; then
 		python3 -m pip install doit
-	elif type port >/dev/null; then
+	elif command -v port >/dev/null 2>&1; then
 		sudo port -N install python313 py313-pip
 		sudo port select --set python python313
 		sudo port select --set python3 python313
 		python3.13 -m pip install doit
-	elif type brew >/dev/null; then
+	elif command -v brew >/dev/null 2>&1; then
 		brew install python
 		python -m pip install doit
 	else
@@ -30,15 +29,15 @@ install_doit() {
 
 main() {
 	cp -n myconfig.example.py myconfig.py || echo "myconfig.py existed, will use it"
-	if $(uname -a | grep --fixed-strings --quiet Darwin); then
-		if type port >/dev/null; then
+	if uname -a | grep --fixed-strings --quiet Darwin; then
+		if command -v port >/dev/null 2>&1; then
 			# -N: non-interactive; ports needing a license/variant answer may fail
 			# instead of prompting, and set -e will abort the whole setup run.
 			sudo port -N selfupdate
 			sudo port -N upgrade outdated
-			port installed requested and active > ports.txt
+			port installed requested and active >ports.txt
 		fi
-		if type brew >/dev/null; then
+		if command -v brew >/dev/null 2>&1; then
 			# copy .zshrc first because PATH is set in .zshrc
 			cp .zshrc ~/.zshrc
 			brew analytics off
@@ -47,13 +46,14 @@ main() {
 			brew bundle install
 			brew upgrade --greedy
 		fi
-		if type mas >/dev/null; then
+		if command -v mas >/dev/null 2>&1; then
 			# skip mas upgrade since mas requires macOS 15+ and this mac is still on macOS 14
 			# mas upgrade
-			mas list > mas.txt
+			mas list >mas.txt
 		fi
 		if [ -e /Applications/Setapp ]; then
-			ls /Applications/Setapp/ | rg '\.app' > setapp.txt
+			# shellcheck disable=SC2012
+			ls /Applications/Setapp/ | rg '\.app' >setapp.txt
 		fi
 	fi
 	if python has-doit.py; then
