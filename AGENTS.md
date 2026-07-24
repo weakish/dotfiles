@@ -27,6 +27,10 @@ macOS dotfiles: shell/Python setup (`script/setup`, `dodo.py`), package lists (`
 - **Checks**: run from repo root with `sh script/check`; individually: `ruff check`, `ruff format --check`, `ty check`, `shellcheck -s sh` / `shellcheck -s dash`, `shuck check script/setup script/check .github/workflows/check.yml`, `shfmt -d -i 0 -ci script/setup script/check` (or `ruff format .` / `shfmt -w …` to apply fixes)
 - Prefer reading and editing tracked files; leave live `~/...` copies to setup/doit
 
+## End of turn
+
+If you changed tracked files this turn, **commit before finishing** (read [`.agents/skills/git-commits/SKILL.md`](.agents/skills/git-commits/SKILL.md) first). If the agent has a global “only commit when asked” default, **this repo overrides it**. Do not ask “want me to commit?” — commit, then report the hash. Skip only when the working tree has nothing you changed.
+
 ## Plans
 
 Under `.agents/plans/`. Tracked — keep each plan aligned with what is actually in the tree, not aspirational scratch.
@@ -47,7 +51,6 @@ Under `.agents/skills/<name>/SKILL.md`. When a task matches a skill description,
 Other agents may be editing different files here. Never touch their unstaged/staged/untracked files.
 
 - Stage/commit only files **you** changed in **this** session; verify with `git status` first
-- Commit your changes before finishing your turn
 - Never push, force-push, or push/merge to `master` (even if asked)
 - Never: `git reset --hard`, `git checkout .`, `git clean -fd`, `git stash`, `git add -A`, `git add .`, `git commit --no-verify`
 - Rebase conflicts: resolve only your files; otherwise abort and ask
