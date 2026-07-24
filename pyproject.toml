@@ -1,0 +1,21 @@
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+src = ["."]
+extend-exclude = ["myconfig.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"dodo.py" = ["E402", "UP036"]
+"myconfig.example.py" = ["E402", "UP036"]
+
+[tool.ty.environment]
+python-version = "3.10"
+
+[tool.ty.src]
+include = ["dodo.py", "myconfig.example.py", "has-doit.py"]
+
+[tool.ty.analysis]
+allowed-unresolved-imports = ["doit.**"]

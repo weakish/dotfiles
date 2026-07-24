@@ -19,12 +19,12 @@ macOS dotfiles: shell/Python setup (`script/setup`, `dodo.py`), package lists (`
 - Write for human review: a human is expected to review agent code. Fewer output tokens save cost, but human readability (including scannability) wins when they conflict.
 - Prefer a small function with a long, descriptive name over a comment that restates what the code does; reserve comments for non-obvious implementation details (formats, limits, platform quirks)
 - Python: target 3.10+ as in `dodo.py` / `myconfig.example.py` (matches doit 0.37+); keep typing consistent with surrounding code
-- Shell: prefer `set -e`; avoid interactive prompts in automation paths
+- Shell: prefer `set -e`; avoid interactive prompts in automation paths; stick to the POSIX utility subset and flags that are not GNU-only (macOS `/bin/sh` and BSD userland)
 
 ## Commands
 
 - Do **not** run `script/setup` (or `python -m doit` / brew/port/mas mutations) unless the user explicitly asks — setup overwrites home configs and mutates the machine
-- For Python edits: sanity-check with the interpreter (e.g. `python3 -m py_compile dodo.py`) when practical
+- **Checks**: run from repo root with `sh script/check`; individually: `ruff check`, `ruff format --check`, `ty check`, `shellcheck -s sh` / `shellcheck -s dash`, `shuck check script/setup script/check .github/workflows/check.yml`, `shfmt -d -i 0 -ci script/setup script/check` (or `ruff format .` / `shfmt -w …` to apply fixes)
 - Prefer reading and editing tracked files; leave live `~/...` copies to setup/doit
 
 ## Plans

@@ -65,6 +65,7 @@ Examples:
 - `:lock:` is for security issues (a special kind of bug)
 - `:fire:` is for removing a feature / API surface, not only deleting files (e.g. dropping a brew cask or tap)
 - `:poop:` marks dirty hacks or workarounds that may need cleanup later
+- `:100:` is for test code and test suites — not lint, format, typecheck, or CI/check runner changes (`:zzz:`)
 - Do not invent other gitmoji codes (including those from the full gitmoji.dev catalogue) for this repo
 
 ## Commit trailers
