@@ -45,6 +45,7 @@ Under `.agents/skills/<name>/SKILL.md`. When a task matches a skill description,
 | Skill | Path |
 |-------|------|
 | Git commits and trailers | `.agents/skills/git-commits/SKILL.md` |
+| Review one commit, then fix (`r` / `r <sha-or-ref>` / bare SHA / `review <sha-or-ref>`) | `.agents/skills/review/SKILL.md` |
 
 ## Git (multi-agent cwd)
 
