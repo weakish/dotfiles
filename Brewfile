@@ -2,6 +2,7 @@ tap "weakish/tap", trusted: true
 tap "steipete/tap", trusted: { casks: ["codexbar"] }
 tap "jotta/cli", trusted: { formulae: ["jotta-cli"] }
 cask "steipete/tap/codexbar"
+brew "apm"
 brew "jotta-cli"
 brew "instaloader"
 brew "mas"
