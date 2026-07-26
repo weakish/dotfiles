@@ -44,7 +44,8 @@ main() {
 			export HOMEBREW_CASK_OPTS="--require-sha"
 			brew update
 			brew bundle install
-			brew upgrade --greedy
+			# --yes: skip "proceed with the upgrade?" (Homebrew ask mode default)
+			brew upgrade --greedy --yes
 		fi
 		if command -v mas >/dev/null 2>&1; then
 			# skip mas upgrade since mas requires macOS 15+ and this mac is still on macOS 14
