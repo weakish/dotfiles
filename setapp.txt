@@ -5,7 +5,6 @@ ClearVPN.app
 Dash.app
 Downie.app
 Expressions.app
-Focused.app
 Folx.app
 Gemini.app
 Gitfox.app
