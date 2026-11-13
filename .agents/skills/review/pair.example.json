@@ -1,0 +1,8 @@
+{
+  "agents": [
+    ["cursor-agent", "-p", "--trust", "--yolo", "--model", "cursor-grok-4.6-medium", "t"],
+    ["grok", "--model", "grok-4.7", "--reasoning-effort", "high", "--always-approve", "-p", "t"]
+  ],
+  "max_passes": 6,
+  "timeout_seconds": 3600
+}

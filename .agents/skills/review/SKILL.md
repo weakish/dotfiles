@@ -8,7 +8,8 @@ description: >-
   to another agent pane in the same Herdr tab when one is available; if not,
   only a Cursor/Grok pane may create the default review pair. Do not wait.
   They prompt this pane with `t` after their own tree amend until either side
-  has no tree findings.
+  has no tree findings. Without Herdr, use headless ping-pong
+  (`REVIEW_T_HEADLESS=1`, see Headless ping-pong).
   `review-and-fix` / polish the tip still lands a new follow-up commit
   when there are tree findings.
   Not for PR/issue creation or history rewrite (except bare `t` /
@@ -156,6 +157,8 @@ When a report has more than 17 tree findings, label **all** of them in letter+nu
 
 Use each section’s `(or: …)` line instead of bullets when that section is empty.
 
+The `No tree findings.` line is **load-bearing**: headless ping-pong stop detection (see [Headless ping-pong](#headless-ping-pong)) scans each pass’s output for the literal string `No tree findings`. Keep that exact wording in clean passes, and do not rephrase it when editing this report format.
+
 When applying tree fixes — from [Select items to fix](#select-items-to-fix), bare `t` when amend is allowed, or `review-and-fix` / polish the tip — prefer the smallest change that addresses the finding. On selection paths, apply only the chosen labels; on those same-turn fix paths, fix every tree item. If a finding needs a product/design choice, ask — do not guess; stop with no commit or amend until the user replies. Do not rewrite the reviewed commit’s message on selection / `review-and-fix` paths (report-only hygiene) unless the user explicitly asks to amend ([Amend (opt-in)](#amend-opt-in-only)).
 
 ### Select items to fix
@@ -268,6 +271,8 @@ Report the new `HEAD` hash when done (note it replaced the reviewed tip). Then, 
 
 Bare `t` only. Two agents take turns on the **same tip** until **either** side has **no tree findings**. Message hygiene does not keep the loop alive. After a tree amend, **handoff and end the turn** — do not wait for the other agent, poll `HEAD`, or poll their status.
 
+If `REVIEW_T_HEADLESS=1` is set, skip the handoff steps below and end the turn after this pass — a headless driver launches the other agent (see [Headless ping-pong](#headless-ping-pong)).
+
 **Handoff target (same Herdr tab, same cwd):** prefer an existing **other** pane that is already running an agent (any agent kind, any model). If there is no such pane, a new pane/agent may be created only when this pane is one of the default review pair kinds (`cursor` or `grok`) — then create the complementary default pair member. If this pane is **not** `cursor` or `grok` and no existing other agent pane is available, do **not** split a pane and do **not** start a new agent; stop after this pass and say handoff was skipped (no suitable other agent pane).
 
 Default pair (used only when this pane is `cursor` or `grok` and no existing other agent pane is available):
@@ -293,6 +298,22 @@ The next pass on this pane is a later `t` (from them after their tree amend, or 
 Stop without handing off when **this** pass has **no tree findings** (clean, or hygiene-only amend only).
 
 Re-check amend guards each pass. Design-choice pause still applies (ask — do not guess; no amend and no handoff until the user replies).
+
+### Headless ping-pong
+
+Use when there is no Herdr, or you prefer an unattended terminal run over panes. The Herdr handoff stays the default for interactive passes.
+
+Setup: copy `pair.example.json` to `pair.json` next to this skill and edit it (the real `pair.json` is gitignored; a missing or invalid config is a hard error). Schema:
+
+- `agents` — a list of exactly two argv lists. Each is the full non-interactive invocation, with the `t` prompt as the final argument, e.g. `["grok", "--model", "grok-4.7", "--reasoning-effort", "high", "--always-approve", "-p", "t"]`. Permission bypass is required (nobody is there to approve prompts).
+- `max_passes` — cap on agent passes (default `6`). A pass is one agent run; passes alternate A then B, starting with A.
+- `timeout_seconds` — per-pass timeout (default `3600`).
+
+Run from the repo to review: `python3 <skill-dir>/pingpong.py` (e.g. `python3 ~/.agents/skills/review/pingpong.py`).
+
+What the driver does: reads `pair.json`, then alternates the agents for up to `max_passes` passes. Each pass runs with `REVIEW_T_HEADLESS=1` (so the bare-`t` flow ends its turn instead of attempting a Herdr handoff) and inherits `HERDR_ENV` harmlessly, since the headless check runs before the Herdr steps. Each pass re-checks the amend guards and amends the evolving tip, exactly like the Herdr ping-pong. Output streams through; the driver stops early when a pass output reports `No tree findings`, and exits nonzero when an agent exits nonzero, times out, output cannot be drained after process-group cleanup, or the pass limit is reached without a clean report (the pass's output is already on screen when that happens). At the end it prints the hash chain from the reviewed tip to the final tip.
+
+Stop detection keys off the literal `No tree findings` line from the bare-`t` report format — a contract defined in [Report, then fix](#report-then-fix); keep that exact string. If your agents phrase it differently, adjust the driver or accept the `max_passes` cap.
 
 ### Amend (opt-in only)
 

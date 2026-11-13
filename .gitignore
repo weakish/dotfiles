@@ -12,3 +12,5 @@ __pycache__
 .ruff_cache/
 .mypy_cache/
 .ty_cache/
+
+.agents/skills/review/pair.json
