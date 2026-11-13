@@ -45,6 +45,7 @@ Under `.agents/skills/<name>/SKILL.md`. When a task matches a skill description,
 | Skill | Path |
 |-------|------|
 | Git commits and trailers | `.agents/skills/git-commits/SKILL.md` |
+| Bootstrap a Debian server (GitHub keys/identity, sudo user, sshd hardening, nftables 22/80/443) | `.agents/skills/bootstrap-debian/SKILL.md` |
 | Review one commit, then fix (`r` / bare SHA / `r <sha>` → lettered report; `y`/`c` = recommended; `h`/`help` = details; `b,d,e` / `all` to fix; `review-and-fix` fixes all) | `.agents/skills/review/SKILL.md` |
 
 ## Git (multi-agent cwd)
