@@ -157,9 +157,11 @@ When a report has more than 17 tree findings, label **all** of them in letter+nu
 
 Use each section’s `(or: …)` line instead of bullets when that section is empty.
 
-The `No tree findings.` line is **load-bearing**: headless ping-pong stop detection (see [Headless ping-pong](#headless-ping-pong)) scans each pass’s output for the literal string `No tree findings`. Keep that exact wording in clean passes, and do not rephrase it when editing this report format.
+The `No tree findings.` and `Need user decision.` lines are **load-bearing**: headless ping-pong stop detection (see [Headless ping-pong](#headless-ping-pong)) scans each pass’s output for those literal strings. Keep that exact wording, and do not rephrase it when editing this report format.
 
 When applying tree fixes — from [Select items to fix](#select-items-to-fix), bare `t` when amend is allowed, or `review-and-fix` / polish the tip — prefer the smallest change that addresses the finding. On selection paths, apply only the chosen labels; on those same-turn fix paths, fix every tree item. If a finding needs a product/design choice, ask — do not guess; stop with no commit or amend until the user replies. Do not rewrite the reviewed commit’s message on selection / `review-and-fix` paths (report-only hygiene) unless the user explicitly asks to amend ([Amend (opt-in)](#amend-opt-in-only)).
+
+In a headless pass (`REVIEW_T_HEADLESS=1`) there is nobody to ask: do not call interactive input tools. Print the report, then the literal line `Need user decision.` followed by the questions, and exit 0 with no edits and no amend. The driver stops and the invoking agent relays the questions to the human.
 
 ### Select items to fix
 
@@ -311,9 +313,9 @@ Setup: copy `pair.example.json` to `pair.json` next to this skill and edit it (t
 
 Run from the repo to review: `python3 <skill-dir>/pingpong.py` (e.g. `python3 ~/.agents/skills/review/pingpong.py`).
 
-What the driver does: reads `pair.json`, then alternates the agents for up to `max_passes` passes. Each pass runs with `REVIEW_T_HEADLESS=1` (so the bare-`t` flow ends its turn instead of attempting a Herdr handoff) and inherits `HERDR_ENV` harmlessly, since the headless check runs before the Herdr steps. Each pass re-checks the amend guards and amends the evolving tip, exactly like the Herdr ping-pong. Output streams through; the driver stops early when a pass output reports `No tree findings`, and exits nonzero when an agent exits nonzero, times out, output cannot be drained after process-group cleanup, or the pass limit is reached without a clean report (the pass's output is already on screen when that happens). At the end it prints the hash chain from the reviewed tip to the final tip.
+What the driver does: reads `pair.json`, then alternates the agents for up to `max_passes` passes. Each pass runs with `REVIEW_T_HEADLESS=1` (so the bare-`t` flow ends its turn instead of attempting a Herdr handoff) and inherits `HERDR_ENV` harmlessly, since the headless check runs before the Herdr steps. Each pass re-checks the amend guards and amends the evolving tip, exactly like the Herdr ping-pong. Output streams through; the driver stops early when a pass output reports `No tree findings`, and also stops (with exit code 2) when a pass prints `Need user decision.` — then the invoking agent relays the questions to the human, applies the answers out-of-band, and reruns the driver. It exits nonzero when an agent exits nonzero, times out, output cannot be drained after process-group cleanup, or the pass limit is reached without a clean report (the pass's output is already on screen when that happens). At the end it prints the hash chain from the reviewed tip to the final tip.
 
-Stop detection keys off the literal `No tree findings` line from the bare-`t` report format — a contract defined in [Report, then fix](#report-then-fix); keep that exact string. If your agents phrase it differently, adjust the driver or accept the `max_passes` cap.
+Stop detection keys off the literal `No tree findings` and `Need user decision.` lines from the bare-`t` report format — contracts defined in [Report, then fix](#report-then-fix); keep those exact strings. If your agents phrase them differently, adjust the driver or accept the `max_passes` cap.
 
 ### Amend (opt-in only)
 

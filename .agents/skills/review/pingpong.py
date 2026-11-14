@@ -11,9 +11,12 @@ Alternates agent A/B, starting with A, for up to max_passes passes.
 Each pass runs with REVIEW_T_HEADLESS=1 so it ends its turn after the
 bare-`t` flow (report, fix, amend) instead of attempting a Herdr handoff.
 The driver stops early when a pass output reports no tree findings, and
-exits nonzero if an agent fails, times out, output cannot be drained after
-process-group cleanup, or the pass limit is reached without a clean report.
-Prints the hash chain from the reviewed tip to the final tip.
+also stops (exit code 2) when a pass asks for a user decision; then the
+invoking agent relays the questions to the human, applies the answers
+out-of-band, and reruns. Exits nonzero if an agent fails, times out,
+output cannot be drained after process-group cleanup, or the pass limit
+is reached without a clean report. Prints the hash chain from the
+reviewed tip to the final tip.
 """
 
 from __future__ import annotations
@@ -32,8 +35,10 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_PATH = SCRIPT_DIR / "pair.json"
 EXAMPLE_PATH = SCRIPT_DIR / "pair.example.json"
 # Contract with SKILL.md: clean bare-`t` passes print the literal `No tree
-# findings` (see "Report, then fix"); keep both in sync.
+# findings`, and passes that need a product/design choice print the literal
+# `Need user decision.` (see "Report, then fix"); keep both in sync.
 NO_TREE_FINDINGS_RE = re.compile(r"(?m)^No tree findings\.$")
+NEED_USER_DECISION_RE = re.compile(r"(?m)^Need user decision\.$")
 
 
 class AgentPair(NamedTuple):
@@ -164,11 +169,16 @@ def output_reports_no_tree_findings(output: str) -> bool:
     return NO_TREE_FINDINGS_RE.search(output) is not None
 
 
+def output_needs_user_decision(output: str) -> bool:
+    return NEED_USER_DECISION_RE.search(output) is not None
+
+
 def main() -> int:
     agents, max_passes, timeout_seconds = load_agent_pair(CONFIG_PATH)
     start_sha = git_head_sha()
     passes_run = 0
     clean_pass_found = False
+    decision_needed = False
     pass_summaries: list[str] = []
     for pass_number in range(1, max_passes + 1):
         argv = agents[(pass_number - 1) % 2]
@@ -183,11 +193,18 @@ def main() -> int:
             )
         passes_run += 1
         head_sha = git_head_sha()
-        no_findings = output_reports_no_tree_findings(output)
         pass_summaries.append(
             f"  pass {pass_number} [{side}] {argv[0]} -> {head_sha[:7]}"
         )
-        if no_findings:
+        if output_needs_user_decision(output):
+            decision_needed = True
+            pass_summaries[-1] += " (need user decision)"
+            print(
+                f"\n== pass {pass_number} needs a user decision; ping-pong stops",
+                flush=True,
+            )
+            break
+        if output_reports_no_tree_findings(output):
             clean_pass_found = True
             pass_summaries[-1] += " (no tree findings)"
             print(
@@ -206,6 +223,12 @@ def main() -> int:
     print(f"\npingpong: {start_sha[:7]} -> {end_sha[:7]} in {passes_run} pass(es)")
     for summary in pass_summaries:
         print(summary)
+    if decision_needed:
+        print(
+            "\npingpong: answer the questions in the pass output, apply the "
+            "changes out-of-band, then rerun."
+        )
+        return 2
     return 0 if clean_pass_found else 1
 
 
