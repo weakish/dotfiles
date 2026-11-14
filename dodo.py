@@ -5,6 +5,8 @@ import sys
 if sys.version_info < (3, 10):
     raise Exception("Python 3.10 or higher is required.")
 
+import shutil
+import stat
 import subprocess
 from collections.abc import Callable, Sequence
 from pathlib import Path
@@ -28,6 +30,50 @@ def task_herdr() -> DoItTask:
         ],
         "targets": [Path("~/.config/herdr/config.toml").expanduser()],
     }
+
+
+def task_skills() -> DoItTask:
+    source = Path(".agents/skills").resolve()
+    install_dir = Path("~/.agents/skills").expanduser()
+
+    def relative_files(root: Path) -> list[Path]:
+        return sorted(p.relative_to(root) for p in root.rglob("*") if p.is_file())
+
+    def same_file(left: Path, right: Path) -> bool:
+        return (
+            stat.S_IMODE(left.stat().st_mode) == stat.S_IMODE(right.stat().st_mode)
+            and left.read_bytes() == right.read_bytes()
+        )
+
+    def identical(left: Path, right: Path) -> bool:
+        if right.is_symlink() or not right.is_dir():
+            return False
+        names = relative_files(left)
+        return names == relative_files(right) and all(
+            same_file(left / name, right / name) for name in names
+        )
+
+    def synced() -> bool:
+        return source.is_dir() and identical(source, install_dir)
+
+    def replace_skills() -> None:
+        if not source.is_dir():
+            raise RuntimeError(
+                f"refusing to replace {install_dir}, {source} is missing"
+            )
+        # Resolve only the parent: a symlinked install dir is unlinked, not followed.
+        location = install_dir.parent.resolve() / install_dir.name
+        if source.is_relative_to(location) or location.is_relative_to(source):
+            raise RuntimeError(
+                f"refusing to replace {install_dir}, which overlaps {source}"
+            )
+        if install_dir.is_symlink() or install_dir.is_file():
+            install_dir.unlink()
+        elif install_dir.is_dir():
+            shutil.rmtree(install_dir)
+        shutil.copytree(source, install_dir)
+
+    return {"actions": [replace_skills], "uptodate": [synced]}
 
 
 if MACOS:
