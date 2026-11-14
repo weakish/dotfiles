@@ -2,71 +2,129 @@
 
 set -e
 
-check_version() {
-	"$1" --version | cut -d ' ' -f 2 | cut -d '.' -f 1
+find_python() {
+	for candidate in python3 python; do
+		if command -v "$candidate" >/dev/null 2>&1 &&
+			"$candidate" -c 'import sys; raise SystemExit(sys.version_info < (3, 10))' 2>/dev/null; then
+			printf '%s\n' "$candidate"
+			return 0
+		fi
+	done
+	return 1
+}
+
+as_root() {
+	if [ "$(id -u)" -eq 0 ]; then
+		"$@"
+	else
+		sudo "$@"
+	fi
+}
+
+apt_get() {
+	as_root env DEBIAN_FRONTEND=noninteractive apt-get "$@"
+}
+
+apt_install() {
+	# --no-install-recommends: keep a minimal dev VM minimal.
+	apt_get install --yes --no-install-recommends "$@"
 }
 
 install_doit() {
-	if uname -a | grep --fixed-strings --quiet Ubuntu; then
-		sudo apt-get install --yes python3-doit
-	elif [ "$(check_version python)" -ge 3 ]; then
-		python -m pip install doit
-	elif [ "$(check_version python3)" -ge 3 ]; then
-		python3 -m pip install doit
+	if command -v apt-get >/dev/null 2>&1; then
+		# system Python is externally managed on Debian/Ubuntu (PEP 668)
+		apt_install python3-doit
+		python=$(find_python) || {
+			echo "apt installed python3-doit, but no Python >= 3.10 was found." >&2
+			exit 1
+		}
+	elif [ -n "$python" ]; then
+		"$python" -m pip install doit
 	elif command -v port >/dev/null 2>&1; then
-		sudo port -N install python313 py313-pip
-		sudo port select --set python python313
-		sudo port select --set python3 python313
-		python3.13 -m pip install doit
+		as_root port -N install python313 py313-pip
+		as_root port select --set python python313
+		as_root port select --set python3 python313
+		python=/opt/local/bin/python3.13
+		"$python" -m pip install doit
 	elif command -v brew >/dev/null 2>&1; then
 		brew install python
-		python -m pip install doit
+		python=$(find_python) || {
+			echo "Please install Python (>= 3.10) then run script/setup again." >&2
+			exit 1
+		}
+		"$python" -m pip install doit
 	else
-		echo "Please install Python (>= 3.10) then run script/setup again."
+		echo "Please install Python (>= 3.10) then run script/setup again." >&2
 		exit 1
 	fi
 }
 
+setup_macos() {
+	if command -v port >/dev/null 2>&1; then
+		# -N: non-interactive; ports needing a license/variant answer may fail
+		# instead of prompting, and set -e will abort the whole setup run.
+		as_root port -N selfupdate
+		as_root port -N upgrade outdated
+		port installed requested and active >ports.txt
+	fi
+	if command -v brew >/dev/null 2>&1; then
+		# copy .zshrc first because PATH is set in .zshrc
+		cp .zshrc ~/.zshrc
+		brew analytics off
+		export HOMEBREW_CASK_OPTS="--require-sha"
+		brew update
+		brew bundle install
+		# --yes: skip "proceed with the upgrade?" (Homebrew ask mode default)
+		brew upgrade --greedy --yes
+	fi
+	if command -v mas >/dev/null 2>&1; then
+		# skip mas upgrade since mas requires macOS 15+ and this mac is still on macOS 14
+		# mas upgrade
+		mas list >mas.txt
+	fi
+	if [ -e /Applications/Setapp ]; then
+		: >setapp.txt
+		for f in /Applications/Setapp/*.app; do
+			[ -e "$f" ] || continue
+			printf '%s\n' "${f##*/}" >>setapp.txt
+		done
+		LC_ALL=C sort -o setapp.txt setapp.txt
+	fi
+}
+
+setup_linux() {
+	if ! command -v apt-get >/dev/null 2>&1; then
+		echo "Unsupported Linux distribution: no apt-get (need Debian or Ubuntu)." >&2
+		exit 1
+	fi
+	apt_get update
+	set --
+	while IFS= read -r package || [ -n "$package" ]; do
+		case "$package" in
+			'' | '#'*) continue ;;
+		esac
+		set -- "$@" "$package"
+	done <linux-packages.txt
+	apt_install "$@"
+}
+
 main() {
 	cp -n myconfig.example.py myconfig.py || echo "myconfig.py existed, will use it"
-	if uname -a | grep --fixed-strings --quiet Darwin; then
-		if command -v port >/dev/null 2>&1; then
-			# -N: non-interactive; ports needing a license/variant answer may fail
-			# instead of prompting, and set -e will abort the whole setup run.
-			sudo port -N selfupdate
-			sudo port -N upgrade outdated
-			port installed requested and active >ports.txt
-		fi
-		if command -v brew >/dev/null 2>&1; then
-			# copy .zshrc first because PATH is set in .zshrc
-			cp .zshrc ~/.zshrc
-			brew analytics off
-			export HOMEBREW_CASK_OPTS="--require-sha"
-			brew update
-			brew bundle install
-			# --yes: skip "proceed with the upgrade?" (Homebrew ask mode default)
-			brew upgrade --greedy --yes
-		fi
-		if command -v mas >/dev/null 2>&1; then
-			# skip mas upgrade since mas requires macOS 15+ and this mac is still on macOS 14
-			# mas upgrade
-			mas list >mas.txt
-		fi
-		if [ -e /Applications/Setapp ]; then
-			: >setapp.txt
-			for f in /Applications/Setapp/*.app; do
-				[ -e "$f" ] || continue
-				printf '%s\n' "${f##*/}" >>setapp.txt
-			done
-			LC_ALL=C sort -o setapp.txt setapp.txt
-		fi
-	fi
-	if python has-doit.py; then
-		python -m doit
-	else
+	case "$(uname -s)" in
+		Darwin) setup_macos ;;
+		Linux) setup_linux ;;
+		*)
+			echo "Unsupported operating system: $(uname -s)" >&2
+			exit 1
+			;;
+	esac
+	if ! python=$(find_python); then
 		install_doit
-		python -m doit
 	fi
+	if ! "$python" has-doit.py; then
+		install_doit
+	fi
+	"$python" -m doit
 }
 
 main

@@ -1,0 +1,20 @@
+# Debian/Ubuntu packages for a minimal headless dev VM.
+
+build-essential
+ca-certificates
+curl
+git
+gnupg
+jq
+less
+openssh-client
+pipx
+python3
+python3-doit
+python3-pip
+python3-venv
+ripgrep
+sudo
+vim
+wget
+xz-utils

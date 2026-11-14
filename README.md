@@ -1,4 +1,4 @@
-My dotfiles for macOS.
+My dotfiles for macOS and Linux.
 
 ## Usage
 
@@ -10,11 +10,20 @@ Ensure that git is installed, then:
     # edit myconfig.py
     sh script/setup
 
+`script/setup` detects the platform:
+
+- **macOS**: installs packages with MacPorts/Homebrew and applies the full desktop config.
+- **Linux** (Debian/Ubuntu): installs `linux-packages.txt` with apt and applies the minimal headless dev VM config.
+
+Linux keeps git at its defaults (no `.gitconfig`) and skips the macOS-only pieces: kitty, Hammerspoon/PaperWM, and `.zprofile`. It also skips `.hgrc` and `.zshrc`, because setup installs neither mercurial nor zsh on Linux.
+
+Edit `linux-packages.txt` to add or remove apt packages.
+
 ## Features
 
 - Vim in private mode.
 
-- [Sign all git commits and tags][git-sign] with ssh key.
+- [Sign all git commits and tags][git-sign] with ssh key (macOS only).
 
     Git supports signing commits with a GPG, SSH, or X.509 key.
     I prefer the SSH key for signing because I mainly use ssh protocol to communite with git server, thus the ssh key is always available on the machine.
