@@ -77,6 +77,17 @@ def task_hg_personal() -> DoItTask:
     }
 
 
+def task_herdr() -> DoItTask:
+    return {
+        "file_dep": [".config/herdr/config.toml"],
+        "actions": [
+            "mkdir -p ~/.config/herdr",
+            "cp .config/herdr/config.toml ~/.config/herdr/config.toml",
+        ],
+        "targets": [Path("~/.config/herdr/config.toml").expanduser()],
+    }
+
+
 def task_paperwm() -> DoItTask:
     return {
         "file_dep": [".hammerspoon/init.lua"],

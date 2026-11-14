@@ -27,7 +27,9 @@ key[Shift-Tab]="${terminfo[kcbt]}"
 [[ -n "${key[PageDown]}"  ]] && bindkey -- "${key[PageDown]}"   end-of-buffer-or-history
 [[ -n "${key[Shift-Tab]}" ]] && bindkey -- "${key[Shift-Tab]}"  reverse-menu-complete
 
-fpath=(~/.zsh $fpath)
+# Completions: ~/.zsh and MacPorts' site-functions (Apple's system zsh
+# omits the latter); extend fpath before compinit so #compdef files register.
+fpath=(~/.zsh /opt/local/share/zsh/site-functions $fpath)
 
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.

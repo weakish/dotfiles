@@ -22,6 +22,7 @@ go
 groff
 gron
 gsed
+herdr
 hexyl
 jq
 LanguageTool
@@ -43,8 +44,6 @@ ripgrep
 scdoc
 tealdeer
 tig
-tmux
-tmux-pasteboard
 trash
 w3m
 wget
