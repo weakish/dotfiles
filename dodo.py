@@ -88,6 +88,17 @@ def task_herdr() -> DoItTask:
     }
 
 
+def task_kitty() -> DoItTask:
+    return {
+        "file_dep": [".config/kitty/kitty.conf"],
+        "actions": [
+            "mkdir -p ~/.config/kitty",
+            "cp .config/kitty/kitty.conf ~/.config/kitty/kitty.conf",
+        ],
+        "targets": [Path("~/.config/kitty/kitty.conf").expanduser()],
+    }
+
+
 def task_paperwm() -> DoItTask:
     return {
         "file_dep": [".hammerspoon/init.lua"],
