@@ -27,6 +27,8 @@ key[Shift-Tab]="${terminfo[kcbt]}"
 [[ -n "${key[PageDown]}"  ]] && bindkey -- "${key[PageDown]}"   end-of-buffer-or-history
 [[ -n "${key[Shift-Tab]}" ]] && bindkey -- "${key[Shift-Tab]}"  reverse-menu-complete
 
+fpath=(~/.zsh $fpath)
+
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
 if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
@@ -47,8 +49,6 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 fi
 
 # The above configuration is adapted from Arch Wiki
-
-fpath=(~/.zsh $fpath)
 
 # pnpm & deno & MacPorts
 export PNPM_HOME="$HOME/Library/pnpm"
