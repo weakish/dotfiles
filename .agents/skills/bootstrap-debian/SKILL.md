@@ -1,6 +1,11 @@
 ---
 name: bootstrap-debian
-description: Bootstrap a fresh Debian server for a GitHub user: create their sudo user with their GitHub SSH keys and git identity, rotate root and user passwords, disable root and password SSH login, and restrict the firewall to 22/80/443 tcp. Use when the user asks to set up, provision, bootstrap, or harden a new Debian server or VPS.
+description: >-
+  Bootstrap a fresh Debian server for a GitHub user: create their sudo user with
+  their GitHub SSH keys and git identity, rotate root and user passwords,
+  disable root and password SSH login, and restrict the firewall to 22/80/443
+  tcp. Use when the user asks to set up, provision, bootstrap, or harden a new
+  Debian server or VPS.
 ---
 
 # Bootstrap a Debian server

@@ -17,6 +17,10 @@ Ensure that git is installed, then:
 
 Linux keeps git at its defaults (no `.gitconfig`) and skips the macOS-only pieces: kitty, Hammerspoon/PaperWM, and `.zprofile`. It also skips `.hgrc` and `.zshrc`, because setup installs neither mercurial nor zsh on Linux.
 
+Linux installs [mise](https://mise.jdx.dev) from its apt repository, enabled with `extrepo` (Debian's catalog of third-party repositories). On macOS, setup installs the MacPorts `mise` port.
+
+Linux also installs coding agents into `~/.local/bin`: [Pi](https://pi.dev) on the mise Node.js 22, [Codex CLI](https://github.com/openai/codex), [Hermes Agent](https://github.com/NousResearch/hermes-agent), and [Claude Code](https://code.claude.com/docs/en/quickstart). Setup installs them without the interactive steps, so run each one once to sign in or configure a model. Pi also gets the [pi-web-access](https://github.com/nicobailon/pi-web-access) package for keyless web search and page fetching; other providers' keys go in `~/.pi/agent/web-search.json`. On macOS, setup installs the MacPorts `codex` and `claude-code` ports instead.
+
 Edit `linux-packages.txt` to add or remove apt packages.
 
 ## Features

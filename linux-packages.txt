@@ -3,6 +3,7 @@
 build-essential
 ca-certificates
 curl
+extrepo
 git
 gnupg
 jq

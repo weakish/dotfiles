@@ -59,12 +59,114 @@ install_doit() {
 	fi
 }
 
+# mise is not in Debian; extrepo enables its signed apt repository from Debian's
+# catalog. `extrepo enable` needs root but does not prompt.
+install_mise() {
+	if command -v mise >/dev/null 2>&1; then
+		return 0
+	fi
+	as_root extrepo enable mise
+	apt_get update
+	apt_install mise
+	if ! command -v mise >/dev/null 2>&1; then
+		echo "mise was installed, but mise is not on PATH." >&2
+		exit 1
+	fi
+}
+
+# Pi needs Node 22.19+; mise installs the newest 22.x into its own data directory,
+# so the system Node is left alone.
+install_node22() {
+	mise install node@22
+}
+
+# Pi runs on mise's Node 22; the installer drops a shim in ~/.local/bin.
+pi_search_path() {
+	node22_dir=$(mise where node@22) || exit 1
+	printf '%s/bin:%s\n' "$node22_dir" "$HOME/.local/bin"
+}
+
+install_pi() {
+	pi_path="$(pi_search_path):$PATH"
+	if PATH="$pi_path" command -v pi >/dev/null 2>&1; then
+		return 0
+	fi
+	mkdir -p "$HOME/.local/bin"
+	installer=$(mktemp)
+	curl -fsSL https://pi.dev/install.sh -o "$installer"
+	# Pi's installer prompts on /dev/tty; detach so setup stays non-interactive.
+	PATH="$pi_path" setsid -w sh "$installer"
+	rm -f "$installer"
+	if ! PATH="$pi_path" command -v pi >/dev/null 2>&1; then
+		echo "Pi was installed, but pi is not on PATH." >&2
+		exit 1
+	fi
+}
+
+# Web search and page fetching, keyless by default; keys go in
+# ~/.pi/agent/web-search.json. pi install is idempotent and needs no TTY.
+install_pi_packages() {
+	pi_path="$(pi_search_path):$PATH"
+	PATH="$pi_path" pi install npm:pi-web-access </dev/null
+}
+
+# Codex CLI ships on npm only for Linux; npm from the Pi Node runtime installs
+# it under ~/.local so no sudo is needed.
+install_codex() {
+	codex_path="$HOME/.local/bin:$(pi_search_path):$PATH"
+	if PATH="$codex_path" command -v codex >/dev/null 2>&1; then
+		return 0
+	fi
+	PATH="$(pi_search_path):$PATH" npm install --global --prefix "$HOME/.local" @openai/codex
+	if ! PATH="$codex_path" command -v codex >/dev/null 2>&1; then
+		echo "Codex was installed, but codex is not on PATH." >&2
+		exit 1
+	fi
+}
+
+# The installer is bash-only. --non-interactive skips `hermes setup` and the
+# gateway service, which would otherwise read /dev/tty; the browser and
+# computer-use drivers are not needed on a headless VM.
+install_hermes() {
+	hermes_path="$HOME/.local/bin:$PATH"
+	if PATH="$hermes_path" command -v hermes >/dev/null 2>&1; then
+		return 0
+	fi
+	installer=$(mktemp)
+	curl -fsSL https://hermes-agent.nousresearch.com/install.sh -o "$installer"
+	setsid -w bash "$installer" --non-interactive --skip-browser --skip-computer-use
+	rm -f "$installer"
+	if ! PATH="$hermes_path" command -v hermes >/dev/null 2>&1; then
+		echo "Hermes was installed, but hermes is not on PATH." >&2
+		exit 1
+	fi
+}
+
+# Native installer (npm is deprecated). Bash-only; setsid keeps it off /dev/tty.
+# Binary lands in ~/.local/bin; run `claude` later to sign in.
+install_claude() {
+	claude_path="$HOME/.local/bin:$PATH"
+	if PATH="$claude_path" command -v claude >/dev/null 2>&1; then
+		return 0
+	fi
+	mkdir -p "$HOME/.local/bin"
+	installer=$(mktemp)
+	curl -fsSL https://claude.ai/install.sh -o "$installer"
+	setsid -w bash "$installer"
+	rm -f "$installer"
+	if ! PATH="$claude_path" command -v claude >/dev/null 2>&1; then
+		echo "Claude Code was installed, but claude is not on PATH." >&2
+		exit 1
+	fi
+}
+
 setup_macos() {
 	if command -v port >/dev/null 2>&1; then
 		# -N: non-interactive; ports needing a license/variant answer may fail
 		# instead of prompting, and set -e will abort the whole setup run.
 		as_root port -N selfupdate
 		as_root port -N upgrade outdated
+		as_root port -N install claude-code codex mise
 		port installed requested and active >ports.txt
 	fi
 	if command -v brew >/dev/null 2>&1; then
@@ -106,6 +208,13 @@ setup_linux() {
 		set -- "$@" "$package"
 	done <linux-packages.txt
 	apt_install "$@"
+	install_mise
+	install_node22
+	install_pi
+	install_pi_packages
+	install_codex
+	install_hermes
+	install_claude
 }
 
 main() {
