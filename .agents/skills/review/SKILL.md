@@ -4,14 +4,17 @@ description: >-
   Review one git commit; letter-label tree findings; wait for `r` / `r <sha>` /
   `review <sha>` / a bare SHA, then fix selected labels (`all`, `y`, `fix b,d`,
   `h`/`help`). Bare `t` amends HEAD when amend is allowed and there is
-  work (tree fixes and/or message hygiene). After a tree amend, hand off `t`
-  to another agent pane in the same Herdr tab when one is available; if not,
-  only a Cursor/Grok pane may create the default review pair. Do not wait.
+  work (tree fixes and/or message hygiene). After a tree amend, reuse an idle
+  agent pane in the same Herdr tab and cwd only when both panes match the
+  agents and models in `pair.json`; stop if a matching pane is busy; otherwise
+  run the headless driver on `HEAD`. Never split or start a pane. After a pane
+  handoff, do not wait.
   They prompt this pane with `t` after their own tree amend until either side
-  has no tree findings. Without Herdr, use headless ping-pong
-  (`REVIEW_T_HEADLESS=1`, see Headless ping-pong).
+  has no tree findings. Headless passes use `REVIEW_T_HEADLESS=1` (see
+  Headless ping-pong).
   `review-and-fix` / polish the tip still lands a new follow-up commit
-  when there are tree findings.
+  when there are tree findings. `pingpong`, optionally with a task, implements
+  the task, commits it, then runs the headless `t` driver.
   Not for PR/issue creation or history rewrite (except bare `t` /
   explicit amend).
 ---
@@ -29,10 +32,11 @@ Any of these invoke this skill. After a lettered report, how to parse `y` / `all
 |-------|-------------------|
 | `r` | `HEAD` — report with letter labels; **wait** (do not fix yet) |
 | `r <sha-or-ref>` | that commit — report; **wait** (`r HEAD` ok) |
-| `t` | `HEAD` (the tip) — report, then [Bare t](#bare-t) (amend when allowed; if blocked, keep the report and stop with no edits). After a **tree** amend, [Ping-pong](#ping-pong) (handoff `t`; do not wait) |
+| `t` | `HEAD` (the tip) — report, then [Bare t](#bare-t) (amend when allowed; if blocked, keep the report and stop with no edits). After a **tree** amend, [Ping-pong](#ping-pong) (hand off to a matching idle pane and do not wait; stop if a matching pane is busy; otherwise run the driver and report it) |
 | message that is **only** a SHA / short SHA / ref | that commit — report; **wait** |
 | `review <sha-or-ref>`, run the review skill | named or `HEAD` — report; **wait** |
 | `review-and-fix`, `review and fix`, polish the tip | named or `HEAD` — report, then fix **all** tree items in the same turn (same as `all`); land a **new** follow-up commit when there are tree findings (not amend) |
+| `pingpong`, optionally with a task description | with a task: implement it and commit, then run the headless `t` driver; with none: run the driver on `HEAD` — [Pingpong keyword](#pingpong-keyword) |
 | `yes`, `y`, `continue`, `c`, bare `fix`, `all`, `fix all`, `fix b,d,e` / `b-d` / …, `h` / `help` / `h B,d`, `none`, `skip` | last lettered report — [Select items to fix](#select-items-to-fix) |
 
 Do **not** treat show / explain / `git log` / questions like “what changed in this commit” as this skill.
@@ -193,7 +197,7 @@ Cross-prefix numbered ranges (e.g. `d3-g4`) are **not** supported — ask the us
 
 - Selection matching is **case-insensitive** (`B,d` = `b,D` = findings marked `B`/`b` and `D`/`d`). Mark case in the report still encodes recommendation.
 - Ignore spaces around commas and hyphens.
-- **Parse order:** keyword forms first (`t`, `y`, bare `fix`, `fix y`, `help`, `h B,d`, `all`, …). Bare `t` is always a new review of `HEAD` ([Bare t](#bare-t)), never a label selection. The phrase **polish the tip** is the `review-and-fix` path (new commit), not `t`. Reserved-letter **pause** (below) applies only when a reserved letter is a **label** token in a list or scoped argument (e.g. `b,h,d`, `help h`), not when it is consumed as part of a keyword form (including bare `fix` / bare `t`).
+- **Parse order:** keyword forms first (`t`, `pingpong`, `y`, bare `fix`, `fix y`, `help`, `h B,d`, `all`, …). Bare `t` is always a new review of `HEAD` ([Bare t](#bare-t)), never a label selection; `pingpong` is the implementation shortcut ([Pingpong keyword](#pingpong-keyword)), never a label selection. The phrase **polish the tip** is the `review-and-fix` path (new commit), not `t`. Reserved-letter **pause** (below) applies only when a reserved letter is a **label** token in a list or scoped argument (e.g. `b,h,d`, `help h`), not when it is consumed as part of a keyword form (including bare `fix` / bare `t`).
 - No prior lettered report in session: say so; do not invent findings.
 - `yes`, `y`, `continue`, `c`, bare `fix` (`fix` prefix optional on the others): every **recommended** tree finding (uppercase marks only). Bare `fix` (message is **only** this word) is the same as `y`. If none are recommended, say so and do not fix.
 - `h`, `help` (message is **only** this word): explain **more detail** on **every** tree finding (upper and lower marks) — do **not** fix; then wait for selection as after the original report. If there are no tree findings, say so.
@@ -271,39 +275,34 @@ Report the new `HEAD` hash when done (note it replaced the reviewed tip). Then, 
 
 ### Ping-pong
 
-Bare `t` only. Two agents take turns on the **same tip** until **either** side has **no tree findings**. Message hygiene does not keep the loop alive. After a tree amend, **handoff and end the turn** — do not wait for the other agent, poll `HEAD`, or poll their status.
+Bare `t` only. Two agents take turns on the **same tip** until **either** side has **no tree findings**. Message hygiene does not keep the loop alive. After a tree amend, hand off to a matching idle pane and end the turn (do not wait for the other agent, poll `HEAD`, or poll their status), stop if a matching pane is busy, or run the driver on `HEAD` when no pane matches.
 
-If `REVIEW_T_HEADLESS=1` is set, skip the handoff steps below and end the turn after this pass — a headless driver launches the other agent (see [Headless ping-pong](#headless-ping-pong)).
+If `REVIEW_T_HEADLESS=1` is set, skip this whole section (no pane reuse, no driver) and end the turn after this pass — the outer driver already launches the other agent (see [Headless ping-pong](#headless-ping-pong)).
 
-**Handoff target (same Herdr tab, same cwd):** prefer an existing **other** pane that is already running an agent (any agent kind, any model). If there is no such pane, a new pane/agent may be created only when this pane is one of the default review pair kinds (`cursor` or `grok`) — then create the complementary default pair member. If this pane is **not** `cursor` or `grok` and no existing other agent pane is available, do **not** split a pane and do **not** start a new agent; stop after this pass and say handoff was skipped (no suitable other agent pane).
+**Never split a pane or start an agent in a pane.** Reuse an existing pane at most.
 
-Default pair (used only when this pane is `cursor` or `grok` and no existing other agent pane is available):
+**Reuse** another agent pane in this tab, same cwd (`herdr agent list`: same `tab_id` as `$HERDR_TAB_ID`, same `cwd`, different `pane_id`), only when the current pane and that pane match two different entries in `pair.json` (one each, same agent and model, in either order):
 
-| Side | Herdr `--kind` | Args after `--` on `agent start` |
-|------|----------------|----------------------------------|
-| Cursor CLI, Grok 4.6 Medium | `cursor` | `--model cursor-grok-4.6-medium --trust --yolo` |
-| Grok Build, Grok 4.7 256K High | `grok` | `--model grok-4.7 --reasoning-effort high --yolo` |
+- Pair file: the one the driver reads — `.agents/skills/review/pair.json` in the repo when it exists, otherwise `~/.agents/skills/review/pair.json`.
+- Entry: agent is the command name (`cursor-agent` maps to Herdr kind `cursor`); model is the value after `-m` / `--model` (including `--model=`), and absent when the entry has no model flag.
+- Pane: agent from `herdr pane current --current` / `herdr agent list`; model from the pane’s foreground argv (`herdr pane process-info --pane <id>` → `foreground_processes[].argv`, taking the entry whose `name` matches the pane agent). A pane whose model is not visible does not match an entry that specifies one.
+- Among the matching panes, take the first `idle` or `done` one (Herdr reports `done` for the same idle state once unseen background work finishes). If panes match but none is `idle` or `done` (for example `working`, `blocked`, or `unknown`), stop after this pass: do not prompt them and do not run the driver, since a second agent would edit the same tip concurrently. Say which pane is busy.
 
-`grok-4.7` already uses a 256K context window; do not add a separate window flag. Grok’s `--yolo` is an unlisted alias of `--always-approve`. Determine this pane’s kind from `herdr pane current --current` → `.result.pane.agent`.
+When matched: `herdr agent prompt <pane_id> t` (no `--wait`), say which pane you handed off to, then end the turn.
 
-After **this** agent’s tree amend:
+Require `HERDR_ENV=1`; without it there is no pane to reuse. Follow [herdr](../herdr/SKILL.md) for CLI and IDs. If a Herdr command fails, report the error and stop — do not claim a handoff.
 
-1. Require `HERDR_ENV=1`. If unset or not `1`, stop after this pass and say you are not inside Herdr (do not spawn). Follow [herdr](../herdr/SKILL.md) for CLI, IDs, split geometry, `--cwd`, and `--no-focus`. If a Herdr command fails, stop and report the error (do not claim handoff).
-2. Find an **other** agent pane in **this tab**, same cwd: `herdr agent list`, then keep entries whose `tab_id` is `$HERDR_TAB_ID`, whose `cwd` matches this pane’s `cwd`, and whose `pane_id` is not this pane’s `pane_id`. Ignore `agent_session.kind` (it is `id`, not the agent kind). If several remain, prefer an `idle` entry, then one whose `agent` differs from this pane’s `agent` (or any other pane when this pane has no agent), otherwise take the first. Reuse that entry’s pane (any agent kind, any model).
-3. If none and this pane’s agent is `cursor` or `grok`: split a sibling pane with `herdr pane split --current --cwd "$PWD" --no-focus` and `--direction right` or `down` per the herdr layout rule (wide → right, tall → down). Then start the **complementary** default pair member with `herdr agent start <name> --kind <other-kind> --pane <new-pane-id> -- <start-args>` from the table above. Prefer names `review-cursor` / `review-grok` when free; otherwise a unique `[a-z][a-z0-9_-]{0,31}` name. Do not close panes you did not create.
-4. If none and this pane’s agent is neither `cursor` nor `grok` (or unknown): do **not** split or start a new agent; stop after this pass and say handoff was skipped because no existing other agent pane was found.
-5. If the chosen other agent is already `working`, do not double-prompt; **end the turn**.
-6. If the chosen other agent is idle (or just started), `herdr agent prompt <pane_id> t` using the reused entry’s `pane_id` or, after a spawn, the new pane’s `pane_id` from `agent start` (`name` may be absent). Do **not** pass `--wait`. Then **end the turn**.
+**Otherwise — no pane matches (not in Herdr, no other agent pane in this tab+cwd, or the pair does not match any) — run the driver on `HEAD`:** the [Pingpong keyword](#pingpong-keyword) path with no task (it checks the amend guards first, then runs the command in [Headless ping-pong](#headless-ping-pong)). Report its hash chain and exit code; on exit 2, relay the `Need user decision.` questions.
 
-The next pass on this pane is a later `t` (from them after their tree amend, or from the user). If they have no tree findings, they stop in their pane and do not prompt you. Do not stay `working` to observe that.
+After a pane handoff, the next pass on that pane is a later `t` (from them after their tree amend, or from the user). If they have no tree findings, they stop in their pane and do not prompt you. Do not stay `working` to observe that.
 
-Stop without handing off when **this** pass has **no tree findings** (clean, or hygiene-only amend only).
+Stop without handoff or driver when **this** pass has **no tree findings** (clean, or hygiene-only amend only).
 
 Re-check amend guards each pass. Design-choice pause still applies (ask — do not guess; no amend and no handoff until the user replies).
 
 ### Headless ping-pong
 
-Use when there is no Herdr, or you prefer an unattended terminal run over panes. The Herdr handoff stays the default for interactive passes.
+Use when there is no Herdr, when no pane matches the pair, or when you prefer an unattended terminal run over panes. Do not start it while a matching pane is busy (see [Ping-pong](#ping-pong)). The pane handoff stays the default for interactive passes when the pair matches.
 
 Setup: copy `pair.example.json` to `pair.json` next to this skill and edit it (the real `pair.json` is gitignored; a missing or invalid config is a hard error). Schema:
 
@@ -311,11 +310,21 @@ Setup: copy `pair.example.json` to `pair.json` next to this skill and edit it (t
 - `max_passes` — cap on agent passes (default `6`). A pass is one agent run; passes alternate A then B, starting with A.
 - `timeout_seconds` — per-pass timeout (default `3600`).
 
-Run from the repo to review: `python3 <skill-dir>/pingpong.py` (e.g. `python3 ~/.agents/skills/review/pingpong.py`).
+Run from the repo to review: `python3 <skill-dir>/pingpong.py`, where `<skill-dir>` is `.agents/skills/review` when the repo has a `pair.json`, otherwise `~/.agents/skills/review`.
 
-What the driver does: reads `pair.json`, then alternates the agents for up to `max_passes` passes. Each pass runs with `REVIEW_T_HEADLESS=1` (so the bare-`t` flow ends its turn instead of attempting a Herdr handoff) and inherits `HERDR_ENV` harmlessly, since the headless check runs before the Herdr steps. Each pass re-checks the amend guards and amends the evolving tip, exactly like the Herdr ping-pong. Output streams through; the driver stops early when a pass output reports `No tree findings`, and also stops (with exit code 2) when a pass prints `Need user decision.` — then the invoking agent relays the questions to the human, applies the answers out-of-band, and reruns the driver. It exits nonzero when an agent exits nonzero, times out, output cannot be drained after process-group cleanup, or the pass limit is reached without a clean report (the pass's output is already on screen when that happens). At the end it prints the hash chain from the reviewed tip to the final tip.
+What the driver does: reads `pair.json`, then alternates the agents for up to `max_passes` passes. Each pass runs with `REVIEW_T_HEADLESS=1` (so the bare-`t` flow ends its turn instead of attempting a Herdr handoff) and inherits `HERDR_ENV` harmlessly, since the headless check runs before the Herdr steps. Each pass re-checks the amend guards and amends the evolving tip, exactly like the Herdr ping-pong. Output streams through; the driver stops early when a pass output reports `No tree findings`, and also stops (with exit code 2) when a pass prints `Need user decision.` — then the invoking agent relays the questions to the human, applies the answers out-of-band, and reruns the driver. It exits nonzero when an agent exits nonzero, times out, output cannot be drained after process-group cleanup, or the pass limit is reached without a clean report (the pass's output is already on screen when that happens). At the end it prints the hash chain from the reviewed tip to the final tip. It can run for hours (up to `max_passes` × `timeout_seconds`), so start it without a short shell timeout (a background job works) and report the hash chain when it completes.
 
 Stop detection keys off the literal `No tree findings` and `Need user decision.` lines from the bare-`t` report format — contracts defined in [Report, then fix](#report-then-fix); keep those exact strings. If your agents phrase them differently, adjust the driver or accept the `max_passes` cap.
+
+### Pingpong keyword
+
+`pingpong` is an implementation shortcut, not a review selection. Treat the rest of the message as the task to implement (feature, fix, refactor, docs, …). With no task text, check the bare-`t` amend guards on `HEAD` first; if amend is blocked, say so and stop. Otherwise skip to step 4.
+
+1. Implement the task, following the project's `AGENTS.md`; ask before guessing when it needs a product/design choice.
+2. Run the project's documented checks.
+3. Read [git-commits](../git-commits/SKILL.md) and land the work as a **new** commit: use the `--only` form and trailers from [Commit the fixes](#commit-the-fixes) (pathspec of the paths this pass changed; never `git add -A` / `git add .`), but pick the gitmoji and subject from the task itself (e.g. `:new:` for a feature), not as a review follow-up. If the task changed nothing, say so and stop (no empty commit). Do not amend the reviewed tip or rewrite history.
+4. Run the headless driver as in [Headless ping-pong](#headless-ping-pong).
+5. Report the implementation commit (when there was a task) and the driver's hash chain. If the driver exits 2, relay the `Need user decision.` questions and wait; on any other nonzero exit, report the failure. Do not hand off to Herdr.
 
 ### Amend (opt-in only)
 
@@ -328,4 +337,5 @@ Otherwise keep the new-commit path and say why amend was skipped.
 - Summarize what changed (brief)
 - Hashes:
   - New-commit path: reviewed commit → fix commit (or “clean, no fix commit”)
-  - Bare `t` / amend: reviewed tip → new `HEAD` after each amend (or “clean, no amend”). Ping-pong: say whether this pass handed off `t` (reused existing agent pane / spawned default pair pane), skipped handoff (already busy / not in Herdr / no existing other agent pane and this pane is not `cursor` or `grok`), or stopped for no tree findings here. Do not claim the other side’s result unless they already reported it in this pane.
+  - Bare `t` / amend: reviewed tip → new `HEAD` after each amend (or “clean, no amend”). Ping-pong: say whether this pass handed off to a matching idle pane, stopped because a matching pane was busy, ran the driver on `HEAD` (hash chain and exit code), or stopped for no tree findings here. Do not claim the other side’s result unless they already reported it in this pane.
+  - Pingpong keyword: implementation commit → driver hash chain and exit code.

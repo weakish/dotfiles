@@ -10,6 +10,8 @@ max_passes and timeout_seconds. The real pair.json is gitignored.
 Alternates agent A/B, starting with A, for up to max_passes passes.
 Each pass runs with REVIEW_T_HEADLESS=1 so it ends its turn after the
 bare-`t` flow (report, fix, amend) instead of attempting a Herdr handoff.
+Refuses to start under REVIEW_T_HEADLESS=1 so a pass cannot spawn a
+nested driver.
 The driver stops early when a pass output reports no tree findings, and
 also stops (exit code 2) when a pass asks for a user decision; then the
 invoking agent relays the questions to the human, applies the answers
@@ -34,11 +36,18 @@ from typing import NamedTuple, NoReturn
 SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_PATH = SCRIPT_DIR / "pair.json"
 EXAMPLE_PATH = SCRIPT_DIR / "pair.example.json"
+
+
+def stop_marker_line_re(phrase: str) -> re.Pattern[str]:
+    # Tolerate indentation, a Markdown list marker, and trailing spaces.
+    return re.compile(rf"(?m)^[ \t]*(?:[-*+][ \t]+)?{re.escape(phrase)}\.[ \t]*$")
+
+
 # Contract with SKILL.md: clean bare-`t` passes print the literal `No tree
 # findings`, and passes that need a product/design choice print the literal
 # `Need user decision.` (see "Report, then fix"); keep both in sync.
-NO_TREE_FINDINGS_RE = re.compile(r"(?m)^No tree findings\.$")
-NEED_USER_DECISION_RE = re.compile(r"(?m)^Need user decision\.$")
+NO_TREE_FINDINGS_RE = stop_marker_line_re("No tree findings")
+NEED_USER_DECISION_RE = stop_marker_line_re("Need user decision")
 
 
 class AgentPair(NamedTuple):
@@ -174,6 +183,11 @@ def output_needs_user_decision(output: str) -> bool:
 
 
 def main() -> int:
+    if os.environ.get("REVIEW_T_HEADLESS") == "1":
+        fail(
+            "refusing to start inside a headless pass (REVIEW_T_HEADLESS=1); "
+            "the outer driver already owns ping-pong"
+        )
     agents, max_passes, timeout_seconds = load_agent_pair(CONFIG_PATH)
     start_sha = git_head_sha()
     passes_run = 0
