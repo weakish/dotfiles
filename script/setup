@@ -22,7 +22,11 @@ as_root() {
 }
 
 apt_get() {
-	as_root env DEBIAN_FRONTEND=noninteractive apt-get "$@"
+	# confdef+confold: do not stop on a changed conffile (package default, else keep old).
+	as_root env DEBIAN_FRONTEND=noninteractive apt-get \
+		-o Dpkg::Options::=--force-confdef \
+		-o Dpkg::Options::=--force-confold \
+		"$@"
 }
 
 apt_install() {
@@ -75,9 +79,11 @@ install_mise() {
 }
 
 # Pi needs Node 22.19+; mise installs the newest 22.x into its own data directory,
-# so the system Node is left alone.
+# so the system Node is left alone. `mise install` does not record a config
+# request or replace an older 22, so upgrade the named 22 as well.
 install_node22() {
 	mise install node@22
+	mise upgrade --yes node@22
 }
 
 # Pi runs on mise's Node 22; the installer drops a shim in ~/.local/bin.
@@ -108,6 +114,9 @@ install_pi() {
 install_pi_packages() {
 	pi_path="$(pi_search_path):$PATH"
 	PATH="$pi_path" pi install npm:pi-web-access </dev/null
+	# Keep installed Pi packages (pi-web-access, ...) current; install above
+	# is idempotent and does not bump releases.
+	PATH="$pi_path" pi update --extensions </dev/null
 }
 
 # Codex CLI ships on npm only for Linux; npm from the Pi Node runtime installs
@@ -200,6 +209,9 @@ setup_linux() {
 		exit 1
 	fi
 	apt_get update
+	# Keep the base image current on the dev VM, matching the macOS path's
+	# brew/port upgrades.
+	apt_get upgrade --yes --no-install-recommends
 	set --
 	while IFS= read -r package || [ -n "$package" ]; do
 		case "$package" in
@@ -210,6 +222,8 @@ setup_linux() {
 	apt_install "$@"
 	install_mise
 	install_node22
+	# Config-requested tools only; stays inside their ranges (not inactive installs).
+	mise upgrade --yes
 	install_pi
 	install_pi_packages
 	install_codex
