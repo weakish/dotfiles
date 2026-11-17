@@ -3,9 +3,9 @@
 
 Run from the repo to review:  python3 <skill-dir>/pingpong.py
 
-Config lives in pair.json next to this script (copy pair.example.json) —
+Config lives in pair.json next to this script (tracked in git) —
 two agent argv lists whose final argument is the `t` prompt, plus
-max_passes and timeout_seconds. The real pair.json is gitignored.
+max_passes and timeout_seconds.
 
 Alternates agent A/B, starting with A, for up to max_passes passes.
 Each pass runs with REVIEW_T_HEADLESS=1 so it ends its turn after the
@@ -35,7 +35,6 @@ from typing import NamedTuple, NoReturn
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_PATH = SCRIPT_DIR / "pair.json"
-EXAMPLE_PATH = SCRIPT_DIR / "pair.example.json"
 
 
 def stop_marker_line_re(phrase: str) -> re.Pattern[str]:
@@ -65,8 +64,7 @@ def fail(message: str) -> NoReturn:
 def load_agent_pair(config_path: Path) -> AgentPair:
     if not config_path.exists():
         fail(
-            f"pair.json not found at {config_path}\n"
-            f"copy {EXAMPLE_PATH.name} to pair.json and edit the agents (see the "
+            f"pair.json not found at {config_path} (see the "
             "Headless ping-pong section of SKILL.md)"
         )
     try:

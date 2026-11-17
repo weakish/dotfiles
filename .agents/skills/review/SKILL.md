@@ -283,7 +283,7 @@ If `REVIEW_T_HEADLESS=1` is set, skip this whole section (no pane reuse, no driv
 
 **Reuse** another agent pane in this tab, same cwd (`herdr agent list`: same `tab_id` as `$HERDR_TAB_ID`, same `cwd`, different `pane_id`), only when the current pane and that pane match two different entries in `pair.json` (one each, same agent and model, in either order):
 
-- Pair file: the one the driver reads — `.agents/skills/review/pair.json` in the repo when it exists, otherwise `~/.agents/skills/review/pair.json`.
+- Pair file: `.agents/skills/review/pair.json` in the repo, otherwise `~/.agents/skills/review/pair.json`.
 - Entry: agent is the command name (`cursor-agent` maps to Herdr kind `cursor`); model is the value after `-m` / `--model` (including `--model=`), and absent when the entry has no model flag.
 - Pane: agent from `herdr pane current --current` / `herdr agent list`; model from the pane’s foreground argv (`herdr pane process-info --pane <id>` → `foreground_processes[].argv`, taking the entry whose `name` matches the pane agent). A pane whose model is not visible does not match an entry that specifies one.
 - Among the matching panes, take the first `idle` or `done` one (Herdr reports `done` for the same idle state once unseen background work finishes). If panes match but none is `idle` or `done` (for example `working`, `blocked`, or `unknown`), stop after this pass: do not prompt them and do not run the driver, since a second agent would edit the same tip concurrently. Say which pane is busy.
@@ -304,13 +304,13 @@ Re-check amend guards each pass. Design-choice pause still applies (ask — do n
 
 Use when there is no Herdr, when no pane matches the pair, or when you prefer an unattended terminal run over panes. Do not start it while a matching pane is busy (see [Ping-pong](#ping-pong)). The pane handoff stays the default for interactive passes when the pair matches.
 
-Setup: copy `pair.example.json` to `pair.json` next to this skill and edit it (the real `pair.json` is gitignored; a missing or invalid config is a hard error). Schema:
+Setup: edit `pair.json` next to this skill (tracked in git; a missing or invalid config is a hard error). Schema:
 
 - `agents` — a list of exactly two argv lists. Each is the full non-interactive invocation, with the `t` prompt as the final argument, e.g. `["grok", "--model", "grok-4.7", "--reasoning-effort", "high", "--always-approve", "-p", "t"]`. Permission bypass is required (nobody is there to approve prompts).
 - `max_passes` — cap on agent passes (default `6`). A pass is one agent run; passes alternate A then B, starting with A.
 - `timeout_seconds` — per-pass timeout (default `3600`).
 
-Run from the repo to review: `python3 <skill-dir>/pingpong.py`, where `<skill-dir>` is `.agents/skills/review` when the repo has a `pair.json`, otherwise `~/.agents/skills/review`.
+Run from the repo to review: `python3 .agents/skills/review/pingpong.py` (or `python3 ~/.agents/skills/review/pingpong.py` outside a repo checkout).
 
 What the driver does: reads `pair.json`, then alternates the agents for up to `max_passes` passes. Each pass runs with `REVIEW_T_HEADLESS=1` (so the bare-`t` flow ends its turn instead of attempting a Herdr handoff) and inherits `HERDR_ENV` harmlessly, since the headless check runs before the Herdr steps. Each pass re-checks the amend guards and amends the evolving tip, exactly like the Herdr ping-pong. Output streams through; the driver stops early when a pass output reports `No tree findings`, and also stops (with exit code 2) when a pass prints `Need user decision.` — then the invoking agent relays the questions to the human, applies the answers out-of-band, and reruns the driver. It exits nonzero when an agent exits nonzero, times out, output cannot be drained after process-group cleanup, or the pass limit is reached without a clean report (the pass's output is already on screen when that happens). At the end it prints the hash chain from the reviewed tip to the final tip. It can run for hours (up to `max_passes` × `timeout_seconds`), so start it without a short shell timeout (a background job works) and report the hash chain when it completes.
 
