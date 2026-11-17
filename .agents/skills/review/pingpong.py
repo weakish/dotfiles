@@ -5,7 +5,8 @@ Run from the repo to review:  python3 <skill-dir>/pingpong.py
 
 Config lives in pair.json next to this script (tracked in git) —
 two agent argv lists whose final argument is the `t` prompt, plus
-max_passes and timeout_seconds.
+max_passes, timeout_seconds, and an optional soft_blacklist.
+A soft_blacklist match is a warning; the driver continues.
 
 Alternates agent A/B, starting with A, for up to max_passes passes.
 Each pass runs with REVIEW_T_HEADLESS=1 so it ends its turn after the
@@ -49,12 +50,21 @@ NO_TREE_FINDINGS_RE = stop_marker_line_re("No tree findings")
 NEED_USER_DECISION_RE = stop_marker_line_re("Need user decision")
 
 
+class SoftBlacklistEntry(NamedTuple):
+    """One warn-only blacklist entry: agent plus optional model and reason."""
+
+    agent: str
+    model: str  # "" matches any model for the agent
+    reason: str
+
+
 class AgentPair(NamedTuple):
     """Configured agent pair plus its run limits."""
 
     agents: list[list[str]]
     max_passes: int
     timeout_seconds: int
+    soft_blacklist: list[SoftBlacklistEntry]
 
 
 def fail(message: str) -> NoReturn:
@@ -89,6 +99,27 @@ def load_agent_pair(config_path: Path) -> AgentPair:
         fail("pair.json: each agent argv must end with the bare 't' prompt")
     max_passes = config.get("max_passes", 6)
     timeout_seconds = config.get("timeout_seconds", 3600)
+    raw_blacklist = config.get("soft_blacklist", [])
+    if not isinstance(raw_blacklist, list) or not all(
+        isinstance(entry, dict) for entry in raw_blacklist
+    ):
+        fail("pair.json: 'soft_blacklist' must be a list of objects")
+    soft_blacklist: list[SoftBlacklistEntry] = []
+    for entry in raw_blacklist:
+        agent = entry.get("agent")
+        model = entry.get("model", "")
+        reason = entry.get("reason", "")
+        if (
+            not isinstance(agent, str)
+            or not agent
+            or not isinstance(model, str)
+            or not isinstance(reason, str)
+        ):
+            fail(
+                "pair.json: each 'soft_blacklist' entry needs a non-empty "
+                "string 'agent' plus optional string 'model'/'reason'"
+            )
+        soft_blacklist.append(SoftBlacklistEntry(agent, model, reason))
     if (
         not isinstance(max_passes, int)
         or isinstance(max_passes, bool)
@@ -101,7 +132,12 @@ def load_agent_pair(config_path: Path) -> AgentPair:
         or timeout_seconds < 1
     ):
         fail("pair.json: 'timeout_seconds' must be a positive integer")
-    return AgentPair([list(argv) for argv in agents], max_passes, timeout_seconds)
+    return AgentPair(
+        [list(argv) for argv in agents],
+        max_passes,
+        timeout_seconds,
+        soft_blacklist,
+    )
 
 
 def git_head_sha() -> str:
@@ -172,6 +208,54 @@ def run_agent_pass(
     return returncode, "".join(collected)
 
 
+def normalize_blacklist_agent(name: str) -> str:
+    # Same alias as SKILL.md: `cursor-agent` is the Herdr kind `cursor`.
+    name = name.strip().lower()
+    return "cursor" if name in ("cursor-agent", "cursor") else name
+
+
+def agent_identity(argv: list[str]) -> tuple[str, str | None]:
+    """Split a pair.json argv list into (agent command, model flag value)."""
+    model: str | None = None
+    for index, part in enumerate(argv[1:], start=1):
+        if part in ("-m", "--model"):
+            if index + 1 < len(argv):
+                model = argv[index + 1]
+        elif part.startswith("--model="):
+            model = part.split("=", 1)[1]
+    return argv[0], model
+
+
+def blacklist_match(entry: SoftBlacklistEntry, agent: str, model: str | None) -> bool:
+    if normalize_blacklist_agent(entry.agent) != normalize_blacklist_agent(agent):
+        return False
+    # An entry without a model matches any model for that agent.
+    if entry.model:
+        return model == entry.model
+    return True
+
+
+def warn_soft_blacklist(
+    agents: list[list[str]], soft_blacklist: list[SoftBlacklistEntry]
+) -> None:
+    # Soft means warn-only: the invoking agent already asked the human
+    # before launching the driver, so print and continue.
+    for index, argv in enumerate(agents):
+        agent, model = agent_identity(argv)
+        for entry in soft_blacklist:
+            if blacklist_match(entry, agent, model):
+                side = "A" if index % 2 == 0 else "B"
+                detail = agent + (f"/{model}" if model else "")
+                listed = entry.agent + (f"/{entry.model}" if entry.model else "")
+                reason = f": {entry.reason}" if entry.reason else ""
+                print(
+                    f"pingpong: warning: agent {side} ({detail}) matches "
+                    f"soft_blacklist entry ({listed}){reason}; continuing "
+                    "(soft blacklist is warn-only)",
+                    flush=True,
+                )
+
+
 def output_reports_no_tree_findings(output: str) -> bool:
     return NO_TREE_FINDINGS_RE.search(output) is not None
 
@@ -186,7 +270,8 @@ def main() -> int:
             "refusing to start inside a headless pass (REVIEW_T_HEADLESS=1); "
             "the outer driver already owns ping-pong"
         )
-    agents, max_passes, timeout_seconds = load_agent_pair(CONFIG_PATH)
+    agents, max_passes, timeout_seconds, soft_blacklist = load_agent_pair(CONFIG_PATH)
+    warn_soft_blacklist(agents, soft_blacklist)
     start_sha = git_head_sha()
     passes_run = 0
     clean_pass_found = False

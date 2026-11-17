@@ -32,11 +32,11 @@ Any of these invoke this skill. After a lettered report, how to parse `y` / `all
 |-------|-------------------|
 | `r` | `HEAD` — report with letter labels; **wait** (do not fix yet) |
 | `r <sha-or-ref>` | that commit — report; **wait** (`r HEAD` ok) |
-| `t` | `HEAD` (the tip) — report, then [Bare t](#bare-t) (amend when allowed; if blocked, keep the report and stop with no edits). After a **tree** amend, [Ping-pong](#ping-pong) (hand off to a matching idle pane and do not wait; stop if a matching pane is busy; otherwise run the driver and report it) |
+| `t` | `HEAD` (the tip) — check [Soft blacklist](#soft-blacklist) first, then report, then [Bare t](#bare-t) (amend when allowed; if blocked, keep the report and stop with no edits). After a **tree** amend, [Ping-pong](#ping-pong) (hand off to a matching idle pane and do not wait; stop if a matching pane is busy; otherwise run the driver and report it) |
 | message that is **only** a SHA / short SHA / ref | that commit — report; **wait** |
 | `review <sha-or-ref>`, run the review skill | named or `HEAD` — report; **wait** |
 | `review-and-fix`, `review and fix`, polish the tip | named or `HEAD` — report, then fix **all** tree items in the same turn (same as `all`); land a **new** follow-up commit when there are tree findings (not amend) |
-| `pingpong`, optionally with a task description | with a task: implement it and commit, then run the headless `t` driver; with none: run the driver on `HEAD` — [Pingpong keyword](#pingpong-keyword) |
+| `pingpong`, optionally with a task description | with a task: check [Soft blacklist](#soft-blacklist) first, then implement it and commit, then run the headless `t` driver; with none: check the blacklist, then run the driver on `HEAD` — [Pingpong keyword](#pingpong-keyword) |
 | `yes`, `y`, `continue`, `c`, bare `fix`, `all`, `fix all`, `fix b,d,e` / `b-d` / …, `h` / `help` / `h B,d`, `none`, `skip` | last lettered report — [Select items to fix](#select-items-to-fix) |
 
 Do **not** treat show / explain / `git log` / questions like “what changed in this commit” as this skill.
@@ -229,9 +229,20 @@ EOF
 - Trailers: `Assisted-by` for this session’s model (required when this session produced the fix diff). Do **not** copy review trailers onto the fix commit. Do **not** add agent `Co-authored-by` (see [git-commits](../git-commits/SKILL.md)).
 - Report the new commit hash when done.
 
+### Soft blacklist
+
+On bare `t` and `pingpong` (with or without a task), check the soft blacklist before any edits, amend, handoff, or driver run. It is warn-and-confirm, not a block: when anything matches, warn the user (which combination matched, plus the entry's `reason` when present) and ask for confirmation; stop with no edits until they confirm, then proceed normally.
+
+If `REVIEW_T_HEADLESS=1` is set, skip this check (the human already confirmed before the driver launched; the driver prints its own warning and continues).
+
+- Config: `soft_blacklist` in `pair.json` (same file fallback as [Ping-pong](#ping-pong): repo-local first, otherwise `~/.agents/skills/review/pair.json`). A missing key means no blacklist.
+- Entry: `{"agent": "<command name>", "model": "<model flag value, optional>", "reason": "<optional>"}`. `agent` is required; an absent or empty `model` matches any model for that agent.
+- Matching reuses the [Ping-pong](#ping-pong) identity rules: agent is the command name (`cursor-agent` and Herdr kind `cursor` are the same agent; compare case-insensitively), model is the value after `-m` / `--model` (including `--model=`; exact match).
+- Check both sides: the current pane's own agent+model (from `herdr pane current --current` / `herdr agent list` plus the foreground argv; skip the self check when not in Herdr; when the model is not visible, skip entries that specify a model) and each agent argv in `pair.json`. A match on either side triggers the warning.
+
 ### Bare t
 
-Bare `t` always targets `HEAD`. In the same turn: check amend guards; report (hygiene header per [Report, then fix](#report-then-fix)); if amend is allowed, fix **every** tree finding (upper and lower), **apply message hygiene**, then **amend** into `HEAD` when there is work (not a new follow-up commit). After a **tree** amend, [Ping-pong](#ping-pong). The design-choice pause in [Report, then fix](#report-then-fix) still applies (ask — do not guess; no amend and no handoff until the user replies). The phrase **polish the tip** does not use this path.
+Bare `t` always targets `HEAD`. In the same turn: check [Soft blacklist](#soft-blacklist) first, then amend guards; report (hygiene header per [Report, then fix](#report-then-fix)); if amend is allowed, fix **every** tree finding (upper and lower), **apply message hygiene**, then **amend** into `HEAD` when there is work (not a new follow-up commit). After a **tree** amend, [Ping-pong](#ping-pong). The design-choice pause in [Report, then fix](#report-then-fix) still applies (ask — do not guess; no amend and no handoff until the user replies). The phrase **polish the tip** does not use this path.
 
 **Amend is allowed only if all of:**
 
@@ -292,7 +303,7 @@ When matched: `herdr agent prompt <pane_id> t` (no `--wait`), say which pane you
 
 Require `HERDR_ENV=1`; without it there is no pane to reuse. Follow [herdr](../herdr/SKILL.md) for CLI and IDs. If a Herdr command fails, report the error and stop — do not claim a handoff.
 
-**Otherwise — no pane matches (not in Herdr, no other agent pane in this tab+cwd, or the pair does not match any) — run the driver on `HEAD`:** the [Pingpong keyword](#pingpong-keyword) path with no task (it checks the amend guards first, then runs the command in [Headless ping-pong](#headless-ping-pong)). Report its hash chain and exit code; on exit 2, relay the `Need user decision.` questions.
+**Otherwise — no pane matches (not in Herdr, no other agent pane in this tab+cwd, or the pair does not match any) — run the driver on `HEAD`:** the [Pingpong keyword](#pingpong-keyword) path with no task (it checks the soft blacklist, then the amend guards, then runs the command in [Headless ping-pong](#headless-ping-pong)). Report its hash chain and exit code; on exit 2, relay the `Need user decision.` questions.
 
 After a pane handoff, the next pass on that pane is a later `t` (from them after their tree amend, or from the user). If they have no tree findings, they stop in their pane and do not prompt you. Do not stay `working` to observe that.
 
@@ -309,6 +320,7 @@ Setup: edit `pair.json` next to this skill (tracked in git; a missing or invalid
 - `agents` — a list of exactly two argv lists. Each is the full non-interactive invocation, with the `t` prompt as the final argument, e.g. `["grok", "--model", "grok-4.7", "--reasoning-effort", "high", "--always-approve", "-p", "t"]`. Permission bypass is required (nobody is there to approve prompts).
 - `max_passes` — cap on agent passes (default `6`). A pass is one agent run; passes alternate A then B, starting with A.
 - `timeout_seconds` — per-pass timeout (default `3600`).
+- `soft_blacklist` — optional warn-only list (default `[]`; entry shape and matching per [Soft blacklist](#soft-blacklist)). The driver prints a warning for each configured agent argv that matches and continues — it cannot ask; the invoking agent asks the human before launching it.
 
 Run from the repo to review: `python3 .agents/skills/review/pingpong.py` (or `python3 ~/.agents/skills/review/pingpong.py` outside a repo checkout).
 
@@ -318,7 +330,7 @@ Stop detection keys off the literal `No tree findings` and `Need user decision.`
 
 ### Pingpong keyword
 
-`pingpong` is an implementation shortcut, not a review selection. Treat the rest of the message as the task to implement (feature, fix, refactor, docs, …). With no task text, check the bare-`t` amend guards on `HEAD` first; if amend is blocked, say so and stop. Otherwise skip to step 4.
+`pingpong` is an implementation shortcut, not a review selection. Treat the rest of the message as the task to implement (feature, fix, refactor, docs, …). Check [Soft blacklist](#soft-blacklist) first (before any edits or driver run). With no task text, check the bare-`t` amend guards on `HEAD` next; if amend is blocked, say so and stop. Otherwise skip to step 4.
 
 1. Implement the task, following the project's `AGENTS.md`; ask before guessing when it needs a product/design choice.
 2. Run the project's documented checks.
