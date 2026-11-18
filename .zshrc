@@ -52,9 +52,9 @@ fi
 
 # The above configuration is adapted from Arch Wiki
 
-# pnpm & deno & MacPorts
+# pnpm & deno & ~/.local/bin & MacPorts
 export PNPM_HOME="$HOME/Library/pnpm"
-export PATH="$PNPM_HOME:$HOME/.deno/bin:/opt/local/bin:/opt/ltex-ls-15.2.0/bin:$PATH"
+export PATH="$PNPM_HOME:$HOME/.deno/bin:$HOME/.local/bin:/opt/local/bin:/opt/ltex-ls-15.2.0/bin:$PATH"
 
 # pnpm end
 

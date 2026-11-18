@@ -151,6 +151,30 @@ install_hermes() {
 	fi
 }
 
+# Official installer is bash-only. Binary lands in ~/.local/bin; the script also
+# runs `agy install`, which may edit shell rc to put that dir on PATH. setsid
+# keeps first-run prompts off /dev/tty; macOS does not ship it, so close stdin
+# instead. Run `agy` later to sign in.
+install_agy() {
+	agy_path="$HOME/.local/bin:$PATH"
+	if PATH="$agy_path" command -v agy >/dev/null 2>&1; then
+		return 0
+	fi
+	mkdir -p "$HOME/.local/bin"
+	installer=$(mktemp)
+	curl -fsSL https://antigravity.google/cli/install.sh -o "$installer"
+	if command -v setsid >/dev/null 2>&1; then
+		setsid -w bash "$installer"
+	else
+		bash "$installer" </dev/null
+	fi
+	rm -f "$installer"
+	if ! PATH="$agy_path" command -v agy >/dev/null 2>&1; then
+		echo "Antigravity CLI was installed, but agy is not on PATH." >&2
+		exit 1
+	fi
+}
+
 # Native installer (npm is deprecated). Bash-only; setsid keeps it off /dev/tty.
 # Binary lands in ~/.local/bin; run `claude` later to sign in.
 install_claude() {
@@ -188,6 +212,7 @@ setup_macos() {
 		# --yes: skip "proceed with the upgrade?" (Homebrew ask mode default)
 		brew upgrade --greedy --yes
 	fi
+	install_agy
 	if command -v mas >/dev/null 2>&1; then
 		# skip mas upgrade since mas requires macOS 15+ and this mac is still on macOS 14
 		# mas upgrade
@@ -229,6 +254,7 @@ setup_linux() {
 	install_codex
 	install_hermes
 	install_claude
+	install_agy
 }
 
 main() {
