@@ -91,7 +91,8 @@ Assisted-by: AGENT_NAME:MODEL_VERSION [TOOL1] [TOOL2]
 ```
 
 - `AGENT_NAME` — the AI tool or framework (e.g. `Cursor`, `Claude Code`, `Copilot`)
-- `MODEL_VERSION` — the model that helped **this** commit’s tree (e.g. `gpt-5.6`, `cursor-grok-4.5`). For a new commit, take it from the current session identity, not from a different commit. Message-only rewrite and amend union: see below.
+- `MODEL_VERSION` — the model that helped **this** commit’s tree (e.g. `cursor-grok-4.6-medium`, `gemini-3.8-flash-high`, `grok-4.6-high`, `gpt-5.6`). For a new commit, take it from the current session identity, not from a different commit. Message-only rewrite and amend union: see below.
+- When writing this session’s own `MODEL_VERSION`, include its effort if `--effort` or `--reasoning-effort` is set. If the slug does not already end with `-<effort>`, append that suffix (e.g. `grok-4.6` + `--reasoning-effort high` → `grok-4.6-high`). Do not append this session’s effort onto existing lines (message-only rewrite, squash ingredients, or prior lines in an amend union).
 - `[TOOL1] [TOOL2]` — optional specialized analysis tools only (e.g. `coccinelle`, `sparse`, `clang-tidy`)
 
 Do not list basic development tools (git, compilers, make, editors).
@@ -99,10 +100,10 @@ Do not list basic development tools (git, compilers, make, editors).
 ```
 :new:foo: scaffold Deno CLI
 
-Assisted-by: Cursor:cursor-grok-4.5
+Assisted-by: Cursor:cursor-grok-4.6-medium
 ```
 
-- For a **new** commit this session produced: write `Assisted-by` from this session’s agent/model. Do **not** copy a line from `git log`, a different commit, or examples — those often name a different model.
+- For a **new** commit this session produced: write `Assisted-by` from this session’s agent/model (including effort level). Do **not** copy a line from `git log`, a different commit, or examples — those often name a different model.
 - [Message-only rewrite](#message-only-rewrite) (same tree): keep the existing lines; do not add this session if absent.
 - When **amending** a commit to add tree this session produced: union this session’s `AGENT_NAME:MODEL_VERSION` with that commit’s existing `Assisted-by` lines (one line per pair; dedupe exact duplicates). Do not drop the original model.
 
