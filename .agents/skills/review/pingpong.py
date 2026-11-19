@@ -217,22 +217,80 @@ def normalize_blacklist_agent(name: str) -> str:
 def agent_identity(argv: list[str]) -> tuple[str, str | None]:
     """Split a pair.json argv list into (agent command, model flag value)."""
     model: str | None = None
+    effort: str | None = None
     for index, part in enumerate(argv[1:], start=1):
         if part in ("-m", "--model"):
             if index + 1 < len(argv):
                 model = argv[index + 1]
         elif part.startswith("--model="):
             model = part.split("=", 1)[1]
+        elif part in ("--effort", "--reasoning-effort"):
+            if index + 1 < len(argv):
+                effort = argv[index + 1]
+        elif part.startswith(("--effort=", "--reasoning-effort=")):
+            effort = part.split("=", 1)[1]
+    if model and effort:
+        norm_model = normalize_blacklist_model(model)
+        norm_effort = normalize_blacklist_model(effort)
+        if not norm_model.endswith(f"-{norm_effort}"):
+            model = f"{model}-{effort}"
     return argv[0], model
+
+
+def normalize_blacklist_model(name: str) -> str:
+    # Same folding as SKILL.md Soft blacklist: case-fold, strip parens,
+    # and turn `_`/whitespace into hyphens.
+    cleaned = re.sub(r"[()]", "", name)
+    return re.sub(r"[-_\s]+", "-", cleaned.strip().lower())
+
+
+EFFORT_RANKS: dict[str, int] = {
+    "none": 0,
+    "off": 0,
+    "minimal": 0,
+    "low": 1,
+    "medium": 2,
+    "high": 3,
+    "xhigh": 4,
+    "extra-high": 4,
+    "max": 5,
+}
+
+# Longest first so extra-high wins: "foo-extra-high" also endswith "-high".
+_EFFORT_NAMES_LONGEST_FIRST = tuple(sorted(EFFORT_RANKS, key=len, reverse=True))
+
+
+def split_model_effort(model_name: str) -> tuple[str, int | None]:
+    for effort in _EFFORT_NAMES_LONGEST_FIRST:
+        suffix = f"-{effort}"
+        if model_name.endswith(suffix):
+            base = model_name[: -len(suffix)]
+            if base:
+                return base, EFFORT_RANKS[effort]
+    return model_name, None
 
 
 def blacklist_match(entry: SoftBlacklistEntry, agent: str, model: str | None) -> bool:
     if normalize_blacklist_agent(entry.agent) != normalize_blacklist_agent(agent):
         return False
     # An entry without a model matches any model for that agent.
-    if entry.model:
-        return model == entry.model
-    return True
+    if not entry.model:
+        return True
+    # Skip model-specific entries when candidate model is not visible in argv.
+    if not model:
+        return False
+    entry_model = normalize_blacklist_model(entry.model)
+    target_model = normalize_blacklist_model(model)
+    if target_model == entry_model:
+        return True
+    entry_base, entry_rank = split_model_effort(entry_model)
+    target_base, target_rank = split_model_effort(target_model)
+    if entry_rank is not None and target_rank is not None:
+        base_matches = target_base == entry_base or target_base.startswith(
+            f"{entry_base}-"
+        )
+        return base_matches and target_rank <= entry_rank
+    return target_model.startswith(f"{entry_model}-")
 
 
 def warn_soft_blacklist(
