@@ -6,6 +6,8 @@
   "max_passes": 6,
   "timeout_seconds": 3600,
   "soft_blacklist": [
-    {"agent": "cursor-agent", "model": "cursor-grok-4.6-medium"}
+    {"agent": "cursor-agent", "model": "cursor-grok-4.6-medium"},
+    {"agent": "agy", "model": "gemini-3.8-flash-medium"},
+    {"agent": "agy", "model": "gemini-4-hydrogen-low"}
   ]
 }
