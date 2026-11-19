@@ -35,6 +35,7 @@ def task_herdr() -> DoItTask:
 def task_skills() -> DoItTask:
     source = Path(".agents/skills").resolve()
     install_dir = Path("~/.agents/skills").expanduser()
+    agy_skills_link = Path("~/.gemini/config/skills").expanduser()
 
     def relative_files(root: Path) -> list[Path]:
         return sorted(p.relative_to(root) for p in root.rglob("*") if p.is_file())
@@ -53,8 +54,24 @@ def task_skills() -> DoItTask:
             same_file(left / name, right / name) for name in names
         )
 
+    def agy_skills_linked() -> bool:
+        return (
+            agy_skills_link.is_symlink() and agy_skills_link.readlink() == install_dir
+        )
+
+    def refuse_nonempty_agy_skills_directory() -> None:
+        # is_dir follows links; a symlink is replaced, not treated as user data.
+        if agy_skills_link.is_symlink() or not agy_skills_link.is_dir():
+            return
+        if any(agy_skills_link.iterdir()):
+            raise RuntimeError(
+                f"refusing to replace {agy_skills_link}, which is a non-empty directory"
+            )
+
     def synced() -> bool:
-        return source.is_dir() and identical(source, install_dir)
+        return (
+            source.is_dir() and identical(source, install_dir) and agy_skills_linked()
+        )
 
     def replace_skills() -> None:
         if not source.is_dir():
@@ -67,11 +84,20 @@ def task_skills() -> DoItTask:
             raise RuntimeError(
                 f"refusing to replace {install_dir}, which overlaps {source}"
             )
+        refuse_nonempty_agy_skills_directory()
         if install_dir.is_symlink() or install_dir.is_file():
             install_dir.unlink()
         elif install_dir.is_dir():
             shutil.rmtree(install_dir)
         shutil.copytree(source, install_dir)
+        # agy discovers global skills under ~/.gemini/config/skills, not ~/.agents.
+        if not agy_skills_linked():
+            agy_skills_link.parent.mkdir(parents=True, exist_ok=True)
+            if agy_skills_link.is_symlink() or agy_skills_link.is_file():
+                agy_skills_link.unlink()
+            elif agy_skills_link.is_dir():
+                agy_skills_link.rmdir()
+            agy_skills_link.symlink_to(install_dir)
 
     return {"actions": [replace_skills], "uptodate": [synced]}
 
