@@ -1,14 +1,15 @@
 {
   "agents": [
-    ["grok", "--model", "grok-4.7", "--reasoning-effort", "medium", "--always-approve", "-p", "t"],
-    ["agy", "--model", "claude-sonnet-5-5-medium", "--dangerously-skip-permissions", "-p", "t"]
+    ["agy", "--model", "gemini-4-neon-low", "--dangerously-skip-permissions", "-p", "t"],
+    ["grok", "--model", "grok-4.7", "--reasoning-effort", "high", "--always-approve", "-p", "t"]
   ],
   "max_passes": 6,
   "timeout_seconds": 3600,
   "soft_blacklist": [
     {"agent": "cursor-agent", "model": "cursor-grok-4.6-medium"},
-    {"agent": "agy", "model": "gemini-3.8-flash-medium"},
+    {"agent": "agy", "model": "gemini-3.8-flash-medium", "reason": "Reports the entire src/ directory as excluded from Prettier formatting, while all files under src/ are ReScript files that Prettier does not support at all"},
     {"agent": "agy", "model": "gemini-4-hydrogen-low"},
-    {"agent": "agy", "model": "gemini-4-argon-low"}
+    {"agent": "pi", "model": "iceman-contributor-free"},
+    {"agent": "pi", "model": "beam-free-high"}
   ]
 }
