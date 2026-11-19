@@ -8,6 +8,7 @@
   "soft_blacklist": [
     {"agent": "cursor-agent", "model": "cursor-grok-4.6-medium"},
     {"agent": "agy", "model": "gemini-3.8-flash-medium"},
-    {"agent": "agy", "model": "gemini-4-hydrogen-low"}
+    {"agent": "agy", "model": "gemini-4-hydrogen-low"},
+    {"agent": "agy", "model": "gemini-4-argon-low"}
   ]
 }
