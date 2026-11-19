@@ -1,7 +1,7 @@
 {
   "agents": [
-    ["grok", "--model", "grok-4.6", "--reasoning-effort", "high", "--always-approve", "-p", "t"],
-    ["cursor-agent", "-p", "--trust", "--yolo", "--model", "grok-4.7", "t"]
+    ["grok", "--model", "grok-4.7", "--reasoning-effort", "medium", "--always-approve", "-p", "t"],
+    ["agy", "--model", "claude-sonnet-5-5-medium", "--dangerously-skip-permissions", "-p", "t"]
   ],
   "max_passes": 6,
   "timeout_seconds": 3600,
