@@ -34,7 +34,9 @@ rules live in `AGENTS.md`.
 ### Body
 
 - After the subject, add a short body when motivation is not obvious from the diff.
-- Order: **what landed** (change details, not a file list); then **problem or trigger** if the reader needs it; then **technical-decision rationale** (why this option, not that one) in its **own paragraph** — rationale is secondary.
+- Order: **what landed** (the cohesive end state of the commit, not a file list); then **problem or trigger** if the reader needs it; then **technical-decision rationale** in its **own paragraph** — rationale is secondary.
+- **Rationale focus:** When including rationale, name the core goal or context (e.g. saving space, avoiding collisions, tightening scope) and tie it to the decision.
+- **Holistic description:** When the change grows, rewrite the body so it still describes that cohesive end state; do not append turn-by-turn notes.
 - Do not frame a commit as introducing a mechanism that already existed; say refresh / bump / tighten when that is what happened.
 - Put trailers after the body.
 
@@ -140,8 +142,9 @@ Only when the user explicitly asks.
 - Order the result for the branch that merges, then for later work that
   rebases on top.
 - **Message:** subject from the group’s **primary intent** (often the lead
-  ingredient); merge bodies in [body order](#body) and re-pick the subject
-  type when that intent is not what the lead subject said.
+  ingredient); re-pick the subject type when that intent is not what the
+  lead subject said. Write one coherent body for the result in [body
+  order](#body), using ingredient messages as source material.
 - **Trailers:**
   - `Suggested-by` / `Reported-by` — preserve from ingredients when still
     true of the result.
