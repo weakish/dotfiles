@@ -175,6 +175,29 @@ install_agy() {
 	fi
 }
 
+# Official installer is bash-only and needs unzip. BUN_INSTALL puts bun in
+# ~/.local/bin alongside the other user-installed tools. Prepend that
+# directory to PATH so the installer's post-install `command -v bun` succeeds
+# and it does not append PATH to bashrc, zshrc, or fish config. The script
+# does not link bunx; bunx is an argv0 alias of bun.
+install_bun() {
+	bun_path="$HOME/.local/bin:$PATH"
+	if ! PATH="$bun_path" command -v bun >/dev/null 2>&1; then
+		mkdir -p "$HOME/.local/bin"
+		installer=$(mktemp)
+		curl -fsSL https://bun.sh/install -o "$installer"
+		BUN_INSTALL="$HOME/.local" PATH="$bun_path" setsid -w bash "$installer"
+		rm -f "$installer"
+		if ! PATH="$bun_path" command -v bun >/dev/null 2>&1; then
+			echo "Bun was installed, but bun is not on PATH." >&2
+			exit 1
+		fi
+	fi
+	if [ -x "$HOME/.local/bin/bun" ]; then
+		ln -sf bun "$HOME/.local/bin/bunx"
+	fi
+}
+
 # Native installer (npm is deprecated). Bash-only; setsid keeps it off /dev/tty.
 # Binary lands in ~/.local/bin; run `claude` later to sign in.
 install_claude() {
@@ -249,6 +272,7 @@ setup_linux() {
 	install_node22
 	# Config-requested tools only; stays inside their ranges (not inactive installs).
 	mise upgrade --yes
+	install_bun
 	install_pi
 	install_pi_packages
 	install_codex
